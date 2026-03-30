@@ -708,10 +708,11 @@ log('[cart] cart.js loaded; window.addToCart =', typeof window.addToCart);
         checkoutState.isSubmitting = true;
         log('[Cart] checkoutToTelegram called');
 
-        // Open Telegram immediately to keep popup tied to user gesture.
+        // Open blank popup immediately while tied to user gesture.
+        // We'll redirect it to the bot URL after getting the order_id.
         let botPopup = null;
         try {
-            botPopup = window.open('https://t.me/yar4ick_order_bot', '_blank', 'noopener');
+            botPopup = window.open('', '_blank');
         } catch (err) {
             botPopup = null;
         }
@@ -810,14 +811,12 @@ log('[cart] cart.js loaded; window.addToCart =', typeof window.addToCart);
 
             log('[Cart] Opening bot:', botUrl);
 
-            try {
-                if (botPopup && !botPopup.closed) {
-                    botPopup.location.href = botUrl;
-                }
-                // If popup was blocked, we don't auto-redirect this tab.
-                // User can use the "Open Telegram" link in the success modal.
-            } catch (err) {
-                // ignore
+            if (botPopup && !botPopup.closed) {
+                // Same-origin about:blank — redirect works without cross-origin block
+                botPopup.location.href = botUrl;
+            } else {
+                // Popup blocked — redirect current tab
+                window.location.href = botUrl;
             }
         } catch (err) {
             const message = err instanceof Error ? err.message : 'Не вдалося оформити замовлення.';
