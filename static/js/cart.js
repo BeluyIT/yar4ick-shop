@@ -675,7 +675,7 @@ log('[cart] cart.js loaded; window.addToCart =', typeof window.addToCart);
         if (actions) {
             actions.innerHTML = showTelegramLink
                 ? `
-                    <a class="btn btn-primary" href="https://t.me/antidrone_order_bot" target="_blank" rel="noopener">Відкрити Telegram</a>
+                    <a class="btn btn-primary" href="https://t.me/yar4ick_order_bot" target="_blank" rel="noopener">Відкрити Telegram</a>
                     <a class="btn btn-primary" href="/">На головну</a>
                   `
                 : `
@@ -711,7 +711,7 @@ log('[cart] cart.js loaded; window.addToCart =', typeof window.addToCart);
         // Open Telegram immediately to keep popup tied to user gesture.
         let botPopup = null;
         try {
-            botPopup = window.open('https://t.me/antidrone_order_bot', '_blank', 'noopener');
+            botPopup = window.open('https://t.me/yar4ick_order_bot', '_blank', 'noopener');
         } catch (err) {
             botPopup = null;
         }
@@ -805,7 +805,7 @@ log('[cart] cart.js loaded; window.addToCart =', typeof window.addToCart);
                 }
             }
 
-            const botUsername = 'antidrone_order_bot';
+            const botUsername = 'yar4ick_order_bot';
             const botUrl = `https://t.me/${botUsername}?start=${encodeURIComponent(orderId)}`;
 
             log('[Cart] Opening bot:', botUrl);
