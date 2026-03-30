@@ -6,7 +6,7 @@
 {% block extra_css %}
 <style>
 /* ============================================
-   SPLASH SCREEN — SLIDE TO UNLOCK
+   SPLASH SCREEN
    ============================================ */
 #splash-screen {
     position: fixed;
@@ -17,373 +17,331 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition: opacity 0.8s ease, transform 0.8s ease;
+    gap: 3rem;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
 }
-
 #splash-screen.hidden {
     opacity: 0;
-    transform: translateY(-100%);
+    visibility: hidden;
     pointer-events: none;
 }
 
-.splash-logo {
-    text-align: center;
-    margin-bottom: 3rem;
-}
-
 .splash-brand {
-    font-size: clamp(2.5rem, 8vw, 5rem);
+    text-align: center;
+}
+.splash-brand h1 {
+    font-size: clamp(2.2rem, 10vw, 5rem);
     font-weight: 900;
-    letter-spacing: 4px;
-    background: linear-gradient(135deg, #FF6600, #FF8800, #FFB347);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #FF6600 0%, #FF8800 50%, #FFB347 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    margin: 0 0 0.5rem;
+    animation: glow 2.5s ease-in-out infinite;
+}
+.splash-brand p {
+    font-size: clamp(0.75rem, 3vw, 1rem);
+    color: #666;
+    letter-spacing: 5px;
     text-transform: uppercase;
-    line-height: 1.1;
-    animation: brandPulse 3s ease-in-out infinite;
+    margin: 0;
 }
 
-.splash-tagline {
-    font-size: clamp(0.85rem, 2vw, 1.1rem);
-    color: #888888;
-    letter-spacing: 6px;
-    text-transform: uppercase;
-    margin-top: 1rem;
+@keyframes glow {
+    0%, 100% { filter: drop-shadow(0 0 15px rgba(255,102,0,0.4)); }
+    50%       { filter: drop-shadow(0 0 35px rgba(255,102,0,0.9)); }
 }
 
-@keyframes brandPulse {
-    0%, 100% { filter: drop-shadow(0 0 20px rgba(255, 102, 0, 0.4)); }
-    50% { filter: drop-shadow(0 0 40px rgba(255, 102, 0, 0.8)); }
-}
-
-/* Slide to unlock */
-.slide-container {
+/* Slide widget */
+.slider-wrap {
+    width: min(300px, 80vw);
+    height: 58px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,102,0,0.35);
+    border-radius: 29px;
     position: relative;
-    width: min(320px, 80vw);
-    height: 60px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 102, 0, 0.3);
-    border-radius: 30px;
     overflow: hidden;
-    cursor: pointer;
-    user-select: none;
-    -webkit-user-select: none;
+    touch-action: none;
 }
-
-.slide-track {
+.slider-fill {
     position: absolute;
     inset: 0;
-    border-radius: 30px;
-    background: linear-gradient(90deg, rgba(255, 102, 0, 0.15) 0%, transparent 100%);
+    background: linear-gradient(90deg, rgba(255,102,0,0.2), transparent);
     transform: scaleX(0);
     transform-origin: left;
-    transition: transform 0.1s linear;
+    border-radius: 29px;
+    pointer-events: none;
 }
-
-.slide-thumb {
+.slider-thumb {
     position: absolute;
     left: 4px;
     top: 4px;
-    width: 52px;
-    height: 52px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     background: linear-gradient(135deg, #FF6600, #FF8800);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 20px rgba(255, 102, 0, 0.6);
-    transition: left 0.05s linear, box-shadow 0.3s ease;
+    cursor: grab;
+    box-shadow: 0 0 20px rgba(255,102,0,0.6);
     z-index: 2;
+    user-select: none;
+    -webkit-user-select: none;
 }
-
-.slide-thumb i {
-    color: #fff;
-    font-size: 1.4rem;
-}
-
-.slide-text {
+.slider-thumb:active { cursor: grabbing; }
+.slider-thumb i { color: #fff; font-size: 1.3rem; pointer-events: none; }
+.slider-label {
     position: absolute;
     inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgba(255, 255, 255, 0.4);
-    font-size: 0.85rem;
+    color: rgba(255,255,255,0.35);
+    font-size: 0.8rem;
     letter-spacing: 3px;
     text-transform: uppercase;
     pointer-events: none;
-    transition: opacity 0.3s;
+    transition: opacity 0.2s;
 }
 
-.slide-container.dragging .slide-text {
-    opacity: 0;
-}
-
-.slide-container.unlocked .slide-thumb {
-    box-shadow: 0 0 40px rgba(255, 102, 0, 1);
-}
-
-/* Animated particles */
-.splash-particles {
+/* Particles */
+.particles {
     position: fixed;
     inset: 0;
     pointer-events: none;
     overflow: hidden;
     z-index: 0;
 }
-
-.particle {
-    position: absolute;
-    width: 2px;
-    height: 2px;
-    background: #FF6600;
-    border-radius: 50%;
-    animation: float linear infinite;
-    opacity: 0;
-}
-
-@keyframes float {
-    0% { transform: translateY(100vh) translateX(0); opacity: 0; }
-    10% { opacity: 0.6; }
-    90% { opacity: 0.4; }
-    100% { transform: translateY(-20px) translateX(30px); opacity: 0; }
+.p { position: absolute; border-radius: 50%; background: #FF6600; opacity: 0;
+     animation: rise linear infinite; }
+@keyframes rise {
+    0%   { transform: translateY(100vh); opacity: 0; }
+    10%  { opacity: 0.5; }
+    90%  { opacity: 0.3; }
+    100% { transform: translateY(-10vh); opacity: 0; }
 }
 
 /* ============================================
-   LANDING SECTION
+   LANDING
    ============================================ */
 #landing {
+    display: none;
     padding-top: 80px;
+    min-height: 100vh;
 }
 
-.landing-hero {
-    background: linear-gradient(180deg, #0a0a0a 0%, #111111 100%);
-    padding: 5rem 0 4rem;
+/* Hero */
+.yt-hero {
+    background: #0a0a0a;
+    padding: 4rem 1.25rem 3rem;
     text-align: center;
     position: relative;
     overflow: hidden;
 }
-
-.landing-hero::before {
+.yt-hero::before {
     content: '';
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(255, 102, 0, 0.08) 0%, transparent 70%);
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(255,102,0,0.07) 0%, transparent 70%);
     pointer-events: none;
 }
-
-.landing-brand {
-    font-size: clamp(2rem, 6vw, 4rem);
+.yt-hero h1 {
+    font-size: clamp(1.8rem, 6vw, 3.5rem);
     font-weight: 900;
-    letter-spacing: 4px;
+    letter-spacing: 3px;
     text-transform: uppercase;
     background: linear-gradient(135deg, #FF6600, #FF8800, #FFB347);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: 1rem;
+    margin: 0 0 0.75rem;
 }
-
-.landing-tagline {
-    font-size: 1rem;
-    color: #888;
-    letter-spacing: 5px;
+.yt-hero p {
+    color: #777;
+    letter-spacing: 4px;
     text-transform: uppercase;
-    margin-bottom: 2.5rem;
+    font-size: 0.85rem;
+    margin: 0 0 2rem;
 }
 
-/* Category cards grid */
-.categories-landing {
-    padding: 4rem 0 5rem;
-    background: #0a0a0a;
+/* Categories */
+.yt-cats {
+    background: #111111;
+    padding: 3rem 1.25rem 4rem;
 }
-
-.categories-landing-title {
+.yt-cats-header {
     text-align: center;
-    font-size: 1.5rem;
+    margin-bottom: 2rem;
+}
+.yt-cats-header h2 {
+    font-size: 1.3rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 4px;
-    color: #ffffff;
-    margin-bottom: 0.75rem;
+    letter-spacing: 3px;
+    color: #fff;
+    margin: 0 0 0.5rem;
 }
-
-.categories-landing-title span {
-    color: #FF6600;
-}
-
-.categories-landing-divider {
-    width: 80px;
-    height: 2px;
+.yt-cats-header h2 span { color: #FF6600; }
+.yt-cats-header div {
+    width: 60px; height: 2px;
     background: linear-gradient(90deg, #FF6600, transparent);
-    margin: 0 auto 3rem;
-    box-shadow: 0 0 20px rgba(255, 102, 0, 0.4);
-}
-
-.categories-landing-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.5rem;
-    max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    box-shadow: 0 0 15px rgba(255,102,0,0.5);
 }
 
-.cat-card {
+.yt-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+@media (min-width: 600px) {
+    .yt-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 900px) {
+    .yt-grid { grid-template-columns: repeat(5, 1fr); gap: 1.25rem; }
+}
+
+.yt-cat {
     background: #1a1a1a;
-    border: 1px solid #1a1500;
-    border-radius: 16px;
-    padding: 2.5rem 1.5rem;
+    border: 1px solid #1f1200;
+    border-radius: 14px;
+    padding: 1.5rem 1rem;
     text-align: center;
     text-decoration: none;
-    color: #ffffff;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-}
-
-.cat-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at center, rgba(255, 102, 0, 0.07) 0%, transparent 70%);
-    opacity: 0;
-    transition: opacity 0.3s;
-    border-radius: 16px;
-}
-
-.cat-card:hover {
-    border-color: #FF6600;
-    transform: scale(1.04) translateY(-4px);
-    box-shadow: 0 8px 30px rgba(255, 102, 0, 0.3);
-    color: #ffffff;
-}
-
-.cat-card:hover::before {
-    opacity: 1;
-}
-
-.cat-card-icon {
-    font-size: 3.5rem;
-    margin-bottom: 1.25rem;
+    color: #fff;
     display: block;
-    transition: transform 0.3s;
-    filter: drop-shadow(0 0 10px rgba(255, 102, 0, 0.3));
+    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    -webkit-tap-highlight-color: transparent;
 }
-
-.cat-card:hover .cat-card-icon {
+.yt-cat:hover, .yt-cat:active {
+    border-color: #FF6600;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 6px 24px rgba(255,102,0,0.25);
+    color: #fff;
+}
+.yt-cat-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 0.75rem;
+    transition: transform 0.25s;
+}
+.yt-cat:hover .yt-cat-icon, .yt-cat:active .yt-cat-icon {
     transform: scale(1.15);
-    filter: drop-shadow(0 0 20px rgba(255, 102, 0, 0.6));
 }
-
-.cat-card-title {
-    font-size: 1.1rem;
+.yt-cat-name {
+    font-size: 0.78rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: #ffffff;
-    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+    color: #ddd;
+    display: block;
+    margin-bottom: 0.3rem;
 }
+.yt-cat-sub {
+    font-size: 0.68rem;
+    color: #555;
+    display: block;
+}
+.yt-cat:hover .yt-cat-name { color: #FF8800; }
 
-.cat-card-desc {
-    font-size: 0.8rem;
-    color: #666;
-    letter-spacing: 0.5px;
+/* Products */
+.yt-products {
+    background: #0a0a0a;
+    padding: 3rem 1.25rem 4rem;
 }
+.yt-products .container { max-width: 1200px; margin: 0 auto; }
 
-.cat-card:hover .cat-card-title {
-    color: #FF8800;
+/* About */
+.yt-about {
+    background: #111;
+    padding: 3rem 1.25rem;
+    text-align: center;
 }
-
-/* Popular products section */
-.landing-products {
-    padding: 4rem 0;
-    background: #111111;
+.yt-about p {
+    max-width: 600px;
+    margin: 0 auto 0.75rem;
+    color: #888;
+    font-size: 0.95rem;
+    line-height: 1.7;
 }
+.yt-about p:first-of-type { color: #ccc; font-size: 1rem; }
 </style>
 {% endblock %}
 
 {% block content %}
 
-<!-- SPLASH SCREEN -->
+<!-- SPLASH -->
 <div id="splash-screen">
-    <div class="splash-particles" id="particles"></div>
+    <div class="particles" id="pts"></div>
 
-    <div class="splash-logo">
-        <div class="splash-brand">Yar4ick Technology</div>
-        <div class="splash-tagline">Техніка &bull; Якість &bull; Довіра</div>
+    <div class="splash-brand">
+        <h1>Yar4ick Technology</h1>
+        <p>Техніка &bull; Якість &bull; Довіра</p>
     </div>
 
-    <div class="slide-container" id="slideContainer">
-        <div class="slide-track" id="slideTrack"></div>
-        <div class="slide-thumb" id="slideThumb">
+    <div class="slider-wrap" id="sliderWrap">
+        <div class="slider-fill" id="sliderFill"></div>
+        <div class="slider-thumb" id="sliderThumb">
             <i class="bi bi-chevron-double-right"></i>
         </div>
-        <div class="slide-text">→ slide to unlock</div>
+        <div class="slider-label">slide to unlock</div>
     </div>
 </div>
 
-<!-- LANDING PAGE -->
-<div id="landing" style="display: none;">
+<!-- LANDING -->
+<div id="landing">
 
-    <!-- Hero -->
-    <section class="landing-hero">
-        <div class="landing-brand">Yar4ick Technology</div>
-        <div class="landing-tagline">Техніка &bull; Якість &bull; Довіра</div>
+    <section class="yt-hero">
+        <h1>Yar4ick Technology</h1>
+        <p>Техніка &bull; Якість &bull; Довіра</p>
         <a href="{% url 'catalog:category_list' %}" class="btn btn-primary btn-lg">
-            <i class="bi bi-grid-3x3-gap"></i>
-            Переглянути весь каталог
+            <i class="bi bi-grid-3x3-gap"></i> Весь каталог
         </a>
     </section>
 
-    <!-- Categories -->
-    <section class="categories-landing">
-        <div class="categories-landing-title"><span>Категорії</span> товарів</div>
-        <div class="categories-landing-divider"></div>
-        <div class="categories-landing-grid">
-
-            <a href="{% url 'catalog:category_detail' slug='smartphones' %}" class="cat-card">
-                <span class="cat-card-icon">📱</span>
-                <div class="cat-card-title">Смартфони</div>
-                <div class="cat-card-desc">iPhone, Samsung, Xiaomi та інші</div>
+    <section class="yt-cats">
+        <div class="yt-cats-header">
+            <h2><span>Категорії</span> товарів</h2>
+            <div></div>
+        </div>
+        <div class="yt-grid">
+            <a href="{% url 'catalog:category_detail' slug='smartphones' %}" class="yt-cat">
+                <span class="yt-cat-icon">📱</span>
+                <span class="yt-cat-name">Смартфони</span>
+                <span class="yt-cat-sub">iPhone, Samsung, Xiaomi</span>
             </a>
-
-            <a href="{% url 'catalog:category_detail' slug='laptops-pk' %}" class="cat-card">
-                <span class="cat-card-icon">💻</span>
-                <div class="cat-card-title">Ноутбуки / ПК</div>
-                <div class="cat-card-desc">MacBook, ASUS, MSI, комп'ютери</div>
+            <a href="{% url 'catalog:category_detail' slug='laptops-pk' %}" class="yt-cat">
+                <span class="yt-cat-icon">💻</span>
+                <span class="yt-cat-name">Ноутбуки / ПК</span>
+                <span class="yt-cat-sub">MacBook, ASUS, MSI</span>
             </a>
-
-            <a href="{% url 'catalog:category_detail' slug='tablets' %}" class="cat-card">
-                <span class="cat-card-icon">📟</span>
-                <div class="cat-card-title">Планшети</div>
-                <div class="cat-card-desc">iPad, Galaxy Tab та інші</div>
+            <a href="{% url 'catalog:category_detail' slug='tablets' %}" class="yt-cat">
+                <span class="yt-cat-icon">📟</span>
+                <span class="yt-cat-name">Планшети</span>
+                <span class="yt-cat-sub">iPad, Galaxy Tab</span>
             </a>
-
-            <a href="{% url 'catalog:category_detail' slug='gaming' %}" class="cat-card">
-                <span class="cat-card-icon">🎮</span>
-                <div class="cat-card-title">Ігрові приставки</div>
-                <div class="cat-card-desc">Xbox, PlayStation, Nintendo</div>
+            <a href="{% url 'catalog:category_detail' slug='gaming' %}" class="yt-cat">
+                <span class="yt-cat-icon">🎮</span>
+                <span class="yt-cat-name">Ігрові</span>
+                <span class="yt-cat-sub">Xbox, PS5, Nintendo</span>
             </a>
-
-            <a href="{% url 'catalog:category_detail' slug='accessories' %}" class="cat-card">
-                <span class="cat-card-icon">🕹️</span>
-                <div class="cat-card-title">Аксесуари та ігри</div>
-                <div class="cat-card-desc">Контролери, ігри, периферія</div>
+            <a href="{% url 'catalog:category_detail' slug='accessories' %}" class="yt-cat">
+                <span class="yt-cat-icon">🕹️</span>
+                <span class="yt-cat-name">Аксесуари</span>
+                <span class="yt-cat-sub">Ігри, чохли, кабелі</span>
             </a>
-
         </div>
     </section>
 
-    <!-- Popular Products -->
     {% if popular_products %}
-    <section class="landing-products">
+    <section class="yt-products">
         <div class="container">
             <h2 class="section-title"><span>Популярні</span> товари</h2>
             <div class="section-divider"></div>
@@ -391,34 +349,25 @@
                 {% for product in popular_products %}
                 <article class="product-card" data-product-url="{{ product.get_absolute_url }}">
                     <div class="product-card-image">
-                        {% with main_image=product.get_main_image %}
-                        {% if main_image %}
-                        <img src="{{ main_image.image.url }}" alt="{{ product.name }}">
-                        {% else %}
-                        <span class="product-card-placeholder">NO IMAGE</span>
-                        {% endif %}
+                        {% with img=product.get_main_image %}
+                        {% if img %}<img src="{{ img.image.url }}" alt="{{ product.name }}">
+                        {% else %}<span class="product-card-placeholder">NO IMAGE</span>{% endif %}
                         {% endwith %}
                         <span class="product-badge badge-popular">Popular</span>
                     </div>
                     <div class="product-card-body">
-                        <h3 class="product-card-title">
-                            <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
-                        </h3>
+                        <h3 class="product-card-title"><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h3>
                         {% if product.description %}
-                        <p class="product-card-description">{{ product.description|truncatewords:12 }}</p>
+                        <p class="product-card-description">{{ product.description|truncatewords:10 }}</p>
                         {% endif %}
                         <div class="product-card-footer">
                             <div class="product-price">
-                                {% if product.price %}
-                                <span class="product-price-current">{{ product.price|floatformat:0 }} UAH</span>
-                                {% endif %}
+                                {% if product.price %}<span class="product-price-current">{{ product.price|floatformat:0 }} грн</span>{% endif %}
                             </div>
-                            <button type="button" class="btn btn-primary btn-sm js-add-to-cart"
-                                data-product-id="{{ product.id }}"
-                                data-name="{{ product.name }}"
-                                data-sku="{{ product.sku|default:'' }}"
-                                data-price="{{ product.price|floatformat:0|default:'0' }}"
-                                data-image="{% with main_image=product.get_main_image %}{% if main_image %}{{ main_image.image.url }}{% endif %}{% endwith %}"
+                            <button class="btn btn-primary btn-sm js-add-to-cart"
+                                data-product-id="{{ product.id }}" data-name="{{ product.name }}"
+                                data-sku="{{ product.sku|default:'' }}" data-price="{{ product.price|floatformat:0|default:'0' }}"
+                                data-image="{% with img=product.get_main_image %}{% if img %}{{ img.image.url }}{% endif %}{% endwith %}"
                                 data-url="{{ product.get_absolute_url }}">
                                 <i class="bi bi-cart-plus"></i> В кошик
                             </button>
@@ -431,7 +380,6 @@
     </section>
     {% endif %}
 
-    <!-- New Products -->
     {% if new_products %}
     <section class="section section-dark">
         <div class="container">
@@ -441,34 +389,25 @@
                 {% for product in new_products %}
                 <article class="product-card" data-product-url="{{ product.get_absolute_url }}">
                     <div class="product-card-image">
-                        {% with main_image=product.get_main_image %}
-                        {% if main_image %}
-                        <img src="{{ main_image.image.url }}" alt="{{ product.name }}">
-                        {% else %}
-                        <span class="product-card-placeholder">NO IMAGE</span>
-                        {% endif %}
+                        {% with img=product.get_main_image %}
+                        {% if img %}<img src="{{ img.image.url }}" alt="{{ product.name }}">
+                        {% else %}<span class="product-card-placeholder">NO IMAGE</span>{% endif %}
                         {% endwith %}
                         <span class="product-badge badge-new">New</span>
                     </div>
                     <div class="product-card-body">
-                        <h3 class="product-card-title">
-                            <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
-                        </h3>
+                        <h3 class="product-card-title"><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h3>
                         {% if product.description %}
-                        <p class="product-card-description">{{ product.description|truncatewords:12 }}</p>
+                        <p class="product-card-description">{{ product.description|truncatewords:10 }}</p>
                         {% endif %}
                         <div class="product-card-footer">
                             <div class="product-price">
-                                {% if product.price %}
-                                <span class="product-price-current">{{ product.price|floatformat:0 }} UAH</span>
-                                {% endif %}
+                                {% if product.price %}<span class="product-price-current">{{ product.price|floatformat:0 }} грн</span>{% endif %}
                             </div>
-                            <button type="button" class="btn btn-primary btn-sm js-add-to-cart"
-                                data-product-id="{{ product.id }}"
-                                data-name="{{ product.name }}"
-                                data-sku="{{ product.sku|default:'' }}"
-                                data-price="{{ product.price|floatformat:0|default:'0' }}"
-                                data-image="{% with main_image=product.get_main_image %}{% if main_image %}{{ main_image.image.url }}{% endif %}{% endwith %}"
+                            <button class="btn btn-primary btn-sm js-add-to-cart"
+                                data-product-id="{{ product.id }}" data-name="{{ product.name }}"
+                                data-sku="{{ product.sku|default:'' }}" data-price="{{ product.price|floatformat:0|default:'0' }}"
+                                data-image="{% with img=product.get_main_image %}{% if img %}{{ img.image.url }}{% endif %}{% endwith %}"
                                 data-url="{{ product.get_absolute_url }}">
                                 <i class="bi bi-cart-plus"></i> В кошик
                             </button>
@@ -481,15 +420,9 @@
     </section>
     {% endif %}
 
-    <!-- About -->
-    <section class="section section-dark">
-        <div class="container">
-            <h2 class="section-title"><span>Про</span> нас</h2>
-            <div class="section-divider"></div>
-            <p>Yar4ick Technology — твій надійний магазин техніки.</p>
-            <p>Ми пропонуємо широкий асортимент електроніки: смартфони, ноутбуки, планшети, ігрові приставки та аксесуари від провідних світових брендів.</p>
-            <p>Зручне замовлення через сайт або Telegram. Швидка доставка по всій Україні.</p>
-        </div>
+    <section class="yt-about">
+        <p>Yar4ick Technology — твій надійний магазин техніки.</p>
+        <p>Смартфони, ноутбуки, планшети, ігрові приставки та аксесуари від провідних брендів. Швидка доставка по всій Україні.</p>
     </section>
 
 </div>
@@ -497,128 +430,110 @@
 
 {% block extra_js %}
 <script>
-(function() {
-    // Generate particles
-    const container = document.getElementById('particles');
-    for (let i = 0; i < 25; i++) {
-        const p = document.createElement('div');
-        p.className = 'particle';
-        p.style.left = Math.random() * 100 + 'vw';
-        p.style.animationDuration = (4 + Math.random() * 8) + 's';
-        p.style.animationDelay = (Math.random() * 6) + 's';
-        p.style.width = p.style.height = (1 + Math.random() * 3) + 'px';
-        container.appendChild(p);
+(function () {
+    'use strict';
+
+    var UNLOCK_KEY = 'yt_v2_unlocked'; // versioned key — clears old sessions
+    var splash  = document.getElementById('splash-screen');
+    var landing = document.getElementById('landing');
+    var wrap    = document.getElementById('sliderWrap');
+    var fill    = document.getElementById('sliderFill');
+    var thumb   = document.getElementById('sliderThumb');
+    var label   = wrap.querySelector('.slider-label');
+
+    /* --- particles --- */
+    var pts = document.getElementById('pts');
+    for (var i = 0; i < 20; i++) {
+        var d = document.createElement('div');
+        d.className = 'p';
+        d.style.cssText = 'left:' + (Math.random()*100) + 'vw;width:' + (1+Math.random()*3) + 'px;height:' + (1+Math.random()*3) + 'px;animation-duration:' + (5+Math.random()*8) + 's;animation-delay:' + (Math.random()*6) + 's';
+        pts.appendChild(d);
     }
 
-    const splash = document.getElementById('splash-screen');
-    const landing = document.getElementById('landing');
-    const thumb = document.getElementById('slideThumb');
-    const track = document.getElementById('slideTrack');
-    const slideContainer = document.getElementById('slideContainer');
-
-    const TRACK_WIDTH = slideContainer.offsetWidth || 320;
-    const THUMB_SIZE = 52 + 8; // width + padding
-    const MAX_LEFT = TRACK_WIDTH - THUMB_SIZE;
-    const UNLOCK_THRESHOLD = 0.85;
-
-    let isDragging = false;
-    let startX = 0;
-    let currentLeft = 0;
-
-    function unlock() {
-        slideContainer.classList.add('unlocked');
-        thumb.style.left = MAX_LEFT + 'px';
-        track.style.transform = 'scaleX(1)';
-
-        setTimeout(() => {
-            splash.classList.add('hidden');
-            landing.style.display = 'block';
-            document.body.style.overflow = '';
-            // Save to sessionStorage so splash doesn't show again on back navigation
-            sessionStorage.setItem('yar4ick_unlocked', '1');
-        }, 500);
+    /* --- unlock logic --- */
+    function showLanding() {
+        splash.classList.add('hidden');
+        landing.style.display = 'block';
+        document.body.style.overflow = '';
+        sessionStorage.setItem(UNLOCK_KEY, '1');
     }
 
-    function setPosition(x) {
-        const left = Math.max(0, Math.min(x, MAX_LEFT));
-        currentLeft = left;
-        thumb.style.left = (left + 4) + 'px';
-        track.style.transform = `scaleX(${left / MAX_LEFT})`;
-        if (left / MAX_LEFT >= UNLOCK_THRESHOLD) {
-            unlock();
-        }
-    }
-
-    // Touch events
-    thumb.addEventListener('touchstart', (e) => {
-        isDragging = true;
-        startX = e.touches[0].clientX - currentLeft;
-        slideContainer.classList.add('dragging');
-    }, { passive: true });
-
-    document.addEventListener('touchmove', (e) => {
-        if (!isDragging) return;
-        setPosition(e.touches[0].clientX - startX);
-    }, { passive: true });
-
-    document.addEventListener('touchend', () => {
-        if (!isDragging) return;
-        isDragging = false;
-        slideContainer.classList.remove('dragging');
-        if (currentLeft / MAX_LEFT < UNLOCK_THRESHOLD) {
-            // Snap back
-            thumb.style.transition = 'left 0.3s ease';
-            track.style.transition = 'transform 0.3s ease';
-            setPosition(0);
-            setTimeout(() => {
-                thumb.style.transition = '';
-                track.style.transition = '';
-            }, 300);
-        }
-    });
-
-    // Mouse events
-    thumb.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        startX = e.clientX - currentLeft;
-        slideContainer.classList.add('dragging');
-        e.preventDefault();
-    });
-
-    document.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        setPosition(e.clientX - startX);
-    });
-
-    document.addEventListener('mouseup', () => {
-        if (!isDragging) return;
-        isDragging = false;
-        slideContainer.classList.remove('dragging');
-        if (currentLeft / MAX_LEFT < UNLOCK_THRESHOLD) {
-            thumb.style.transition = 'left 0.3s ease';
-            track.style.transition = 'transform 0.3s ease';
-            setPosition(0);
-            setTimeout(() => {
-                thumb.style.transition = '';
-                track.style.transition = '';
-            }, 300);
-        }
-    });
-
-    // Click on container — instant unlock (for desktop convenience)
-    slideContainer.addEventListener('click', (e) => {
-        if (e.target === slideContainer || e.target.classList.contains('slide-text')) {
-            unlock();
-        }
-    });
-
-    // Check if already unlocked in this session
-    if (sessionStorage.getItem('yar4ick_unlocked')) {
+    // Already unlocked this session?
+    if (sessionStorage.getItem(UNLOCK_KEY)) {
         splash.style.display = 'none';
         landing.style.display = 'block';
-    } else {
-        document.body.style.overflow = 'hidden';
+        return;
     }
-})();
+
+    document.body.style.overflow = 'hidden';
+
+    var maxLeft = wrap.offsetWidth - thumb.offsetWidth - 8;
+    var dragging = false;
+    var startX = 0;
+    var curLeft = 0;
+
+    function setPos(x) {
+        var left = Math.max(0, Math.min(x, maxLeft));
+        curLeft = left;
+        thumb.style.transform = 'translateX(' + left + 'px)';
+        fill.style.transform = 'scaleX(' + (left / maxLeft) + ')';
+        label.style.opacity = left > 30 ? '0' : '1';
+        if (left / maxLeft >= 0.88) showLanding();
+    }
+
+    function snapBack() {
+        thumb.style.transition = 'transform 0.3s ease';
+        fill.style.transition  = 'transform 0.3s ease';
+        setPos(0);
+        setTimeout(function () {
+            thumb.style.transition = '';
+            fill.style.transition  = '';
+        }, 300);
+    }
+
+    /* Touch */
+    thumb.addEventListener('touchstart', function (e) {
+        dragging = true;
+        startX = e.touches[0].clientX - curLeft;
+        e.preventDefault();
+    }, { passive: false });
+
+    document.addEventListener('touchmove', function (e) {
+        if (!dragging) return;
+        setPos(e.touches[0].clientX - startX);
+    }, { passive: true });
+
+    document.addEventListener('touchend', function () {
+        if (!dragging) return;
+        dragging = false;
+        if (curLeft / maxLeft < 0.88) snapBack();
+    });
+
+    /* Mouse */
+    thumb.addEventListener('mousedown', function (e) {
+        dragging = true;
+        startX = e.clientX - curLeft;
+        e.preventDefault();
+    });
+    document.addEventListener('mousemove', function (e) {
+        if (!dragging) return;
+        setPos(e.clientX - startX);
+    });
+    document.addEventListener('mouseup', function () {
+        if (!dragging) return;
+        dragging = false;
+        if (curLeft / maxLeft < 0.88) snapBack();
+    });
+
+    /* Tap anywhere on splash = unlock (fallback for any click issues) */
+    splash.addEventListener('click', function (e) {
+        if (e.target !== thumb) showLanding();
+    });
+
+    /* Recalc on resize */
+    window.addEventListener('resize', function () {
+        maxLeft = wrap.offsetWidth - thumb.offsetWidth - 8;
+    });
+}());
 </script>
 {% endblock %}
