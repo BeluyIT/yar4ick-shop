@@ -128,7 +128,7 @@
    LANDING
    ============================================ */
 #landing {
-    display: none;
+    display: block;
     padding-top: 80px;
     min-height: 100vh;
 }
@@ -433,38 +433,47 @@
 (function () {
     'use strict';
 
-    var UNLOCK_KEY = 'yt_v2_unlocked'; // versioned key — clears old sessions
-    var splash  = document.getElementById('splash-screen');
-    var landing = document.getElementById('landing');
-    var wrap    = document.getElementById('sliderWrap');
-    var fill    = document.getElementById('sliderFill');
-    var thumb   = document.getElementById('sliderThumb');
-    var label   = wrap.querySelector('.slider-label');
+    var UNLOCK_KEY = 'yt_v2_unlocked';
+
+    // Safe sessionStorage wrapper (fails in iOS private browsing)
+    function ssGet(k) { try { return sessionStorage.getItem(k); } catch(e) { return null; } }
+    function ssSet(k,v) { try { sessionStorage.setItem(k,v); } catch(e) {} }
+
+    var splash = document.getElementById('splash-screen');
+    var wrap   = document.getElementById('sliderWrap');
+    var fill   = document.getElementById('sliderFill');
+    var thumb  = document.getElementById('sliderThumb');
+
+    // If any element missing, bail — landing is already visible
+    if (!splash || !wrap || !fill || !thumb) return;
+
+    var label = wrap.querySelector('.slider-label');
 
     /* --- particles --- */
     var pts = document.getElementById('pts');
-    for (var i = 0; i < 20; i++) {
-        var d = document.createElement('div');
-        d.className = 'p';
-        d.style.cssText = 'left:' + (Math.random()*100) + 'vw;width:' + (1+Math.random()*3) + 'px;height:' + (1+Math.random()*3) + 'px;animation-duration:' + (5+Math.random()*8) + 's;animation-delay:' + (Math.random()*6) + 's';
-        pts.appendChild(d);
+    if (pts) {
+        for (var i = 0; i < 20; i++) {
+            var d = document.createElement('div');
+            d.className = 'p';
+            d.style.cssText = 'left:' + (Math.random()*100) + 'vw;width:' + (1+Math.random()*3) + 'px;height:' + (1+Math.random()*3) + 'px;animation-duration:' + (5+Math.random()*8) + 's;animation-delay:' + (Math.random()*6) + 's';
+            pts.appendChild(d);
+        }
     }
 
     /* --- unlock logic --- */
     function showLanding() {
         splash.classList.add('hidden');
-        landing.style.display = 'block';
         document.body.style.overflow = '';
-        sessionStorage.setItem(UNLOCK_KEY, '1');
+        ssSet(UNLOCK_KEY, '1');
     }
 
-    // Already unlocked this session?
-    if (sessionStorage.getItem(UNLOCK_KEY)) {
+    // Already unlocked this session? Just hide splash immediately
+    if (ssGet(UNLOCK_KEY)) {
         splash.style.display = 'none';
-        landing.style.display = 'block';
         return;
     }
 
+    // Show splash over already-visible landing
     document.body.style.overflow = 'hidden';
 
     var maxLeft = wrap.offsetWidth - thumb.offsetWidth - 8;
