@@ -12,7 +12,7 @@
     <link rel="icon" href="{% static 'favicon.svg' %}?v={{ settings.CACHE_BUST }}" type="image/svg+xml">
     <link rel="icon" href="{% static 'favicon.ico' %}?v={{ settings.CACHE_BUST }}" sizes="any">
     <link rel="apple-touch-icon" href="{% static 'favicon.svg' %}?v={{ settings.CACHE_BUST }}">
-    <link href="{% static 'css/style.css' %}?cb={{ settings.CACHE_BUST }}" rel="stylesheet">
+    <link href="{% static 'css/style.v2.css' %}" rel="stylesheet">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
@@ -64,9 +64,9 @@
             </nav>
 
             <div class="header-actions">
-                <a href="https://t.me/yar4ick_tech" target="_blank" class="header-action">
+                <a href="https://t.me/liashyarchik" target="_blank" class="header-action">
                     <i class="bi bi-telegram"></i>
-                    <span>@yar4ick_tech</span>
+                    <span>@liashyarchik</span>
                 </a>
                 <a href="{% url 'catalog:cart' %}" class="header-action header-cart" title="Кошик">
                     <i class="bi bi-cart3"></i>
@@ -89,8 +89,8 @@
         <a href="{% url 'catalog:category_detail' slug='tablets' %}" class="mobile-nav-link">📟 Планшети</a>
         <a href="{% url 'catalog:category_detail' slug='gaming' %}" class="mobile-nav-link">🎮 Ігрові приставки</a>
         <a href="{% url 'catalog:category_detail' slug='accessories' %}" class="mobile-nav-link">🕹️ Аксесуари та ігри</a>
-        <a href="https://t.me/yar4ick_tech" target="_blank" class="mobile-nav-link">
-            <i class="bi bi-telegram"></i> @yar4ick_tech
+        <a href="https://t.me/liashyarchik" target="_blank" class="mobile-nav-link">
+            <i class="bi bi-telegram"></i> @liashyarchik
         </a>
     </nav>
 
@@ -117,7 +117,7 @@
                     <h4 class="footer-title">Контакти</h4>
                     <div class="footer-contact">
                         <i class="bi bi-telegram"></i>
-                        <a href="https://t.me/yar4ick_tech" target="_blank">Telegram</a>
+                        <a href="https://t.me/liashyarchik" target="_blank">Telegram</a>
                     </div>
                     <div class="footer-contact">
                         <i class="bi bi-instagram"></i>
