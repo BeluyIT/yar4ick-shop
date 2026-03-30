@@ -266,7 +266,7 @@ log('[cart] cart.js loaded; window.addToCart =', typeof window.addToCart);
     };
 
     const openTelegramOrder = (button) => {
-        const handle = button.dataset.telegram || 'antidrone_ukraine';
+        const handle = button.dataset.telegram || 'yar4ick_tech';
         const item = {
             name: button.dataset.name || 'Товар',
             price: Number(button.dataset.price) || 0,

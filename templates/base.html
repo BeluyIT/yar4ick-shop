@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}ANTIDRONE.CC - Professional UAV Countermeasures{% endblock %}</title>
+    <title>{% block title %}Yar4ick Technology — Техніка. Якість. Довіра.{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -20,41 +20,53 @@
     <header class="header">
         <div class="container">
             <a href="{% url 'catalog:index' %}" class="header-logo">
-                <i class="bi bi-shield-shaded logo-icon"></i>
-                ANTIDRONE
+                <i class="bi bi-lightning-charge-fill logo-icon"></i>
+                Yar4ick<span style="color: var(--accent-primary);">Tech</span>
             </a>
 
             <nav class="header-nav">
                 <a href="{% url 'catalog:index' %}" class="nav-link">Головна</a>
+                <a href="{% url 'catalog:category_list' %}" class="nav-link">Каталог</a>
 
                 <div class="nav-dropdown">
-                    <a href="{% url 'catalog:category_detail' slug='anteny' %}" class="nav-link">
-                        Антени <i class="bi bi-chevron-down" style="font-size: 0.7rem;"></i>
+                    <a href="{% url 'catalog:category_detail' slug='smartphones' %}" class="nav-link">
+                        📱 Смартфони <i class="bi bi-chevron-down" style="font-size: 0.7rem;"></i>
                     </a>
                     <div class="nav-dropdown-content">
-                        <a href="{% url 'catalog:category_detail' slug='directional' %}" class="nav-dropdown-item">Directional</a>
-                        <a href="{% url 'catalog:category_detail' slug='omni' %}" class="nav-dropdown-item">Omni-Directional</a>
-                        <a href="{% url 'catalog:category_detail' slug='patch' %}" class="nav-dropdown-item">Patch</a>
-                        <a href="{% url 'catalog:category_detail' slug='panel' %}" class="nav-dropdown-item">Panel</a>
+                        <a href="{% url 'catalog:category_detail' slug='iphone' %}" class="nav-dropdown-item">iPhone</a>
+                        <a href="{% url 'catalog:category_detail' slug='samsung' %}" class="nav-dropdown-item">Samsung</a>
+                        <a href="{% url 'catalog:category_detail' slug='xiaomi' %}" class="nav-dropdown-item">Xiaomi</a>
+                        <a href="{% url 'catalog:category_detail' slug='smartphones-other' %}" class="nav-dropdown-item">Інші бренди</a>
                     </div>
                 </div>
 
                 <div class="nav-dropdown">
-                    <a href="{% url 'catalog:category_detail' slug='moduli' %}" class="nav-link">
-                        Модулі <i class="bi bi-chevron-down" style="font-size: 0.7rem;"></i>
+                    <a href="{% url 'catalog:category_detail' slug='laptops-pk' %}" class="nav-link">
+                        💻 Ноутбуки / ПК <i class="bi bi-chevron-down" style="font-size: 0.7rem;"></i>
                     </a>
                     <div class="nav-dropdown-content">
-                        <a href="{% url 'catalog:category_detail' slug='rf-detektory' %}" class="nav-dropdown-item">RF Детектори</a>
-                        <a href="{% url 'catalog:category_detail' slug='sdr-moduli' %}" class="nav-dropdown-item">SDR Модулі</a>
-                        <a href="{% url 'catalog:category_detail' slug='pidsylyuvachi' %}" class="nav-dropdown-item">Підсилювачі</a>
+                        <a href="{% url 'catalog:category_detail' slug='laptops' %}" class="nav-dropdown-item">Ноутбуки</a>
+                        <a href="{% url 'catalog:category_detail' slug='computers' %}" class="nav-dropdown-item">Комп'ютери</a>
+                        <a href="{% url 'catalog:category_detail' slug='components' %}" class="nav-dropdown-item">Комплектуючі</a>
+                    </div>
+                </div>
+
+                <div class="nav-dropdown">
+                    <a href="{% url 'catalog:category_detail' slug='gaming' %}" class="nav-link">
+                        🎮 Ігрові <i class="bi bi-chevron-down" style="font-size: 0.7rem;"></i>
+                    </a>
+                    <div class="nav-dropdown-content">
+                        <a href="{% url 'catalog:category_detail' slug='xbox' %}" class="nav-dropdown-item">Xbox</a>
+                        <a href="{% url 'catalog:category_detail' slug='playstation' %}" class="nav-dropdown-item">PlayStation</a>
+                        <a href="{% url 'catalog:category_detail' slug='nintendo' %}" class="nav-dropdown-item">Nintendo</a>
                     </div>
                 </div>
             </nav>
 
             <div class="header-actions">
-                <a href="https://t.me/antidrone_ukraine" target="_blank" class="header-action">
+                <a href="https://t.me/yar4ick_tech" target="_blank" class="header-action">
                     <i class="bi bi-telegram"></i>
-                    <span>@antidrone_ukraine</span>
+                    <span>@yar4ick_tech</span>
                 </a>
                 <a href="{% url 'catalog:cart' %}" class="header-action header-cart" title="Кошик">
                     <i class="bi bi-cart3"></i>
@@ -71,17 +83,14 @@
     <!-- Mobile Navigation -->
     <nav class="mobile-nav" id="mobile-nav">
         <a href="{% url 'catalog:index' %}" class="mobile-nav-link">Головна</a>
-        <a href="{% url 'catalog:category_detail' slug='anteny' %}" class="mobile-nav-link">Антени</a>
-        <a href="{% url 'catalog:category_detail' slug='directional' %}" class="mobile-nav-sublink">Directional</a>
-        <a href="{% url 'catalog:category_detail' slug='omni' %}" class="mobile-nav-sublink">Omni-Directional</a>
-        <a href="{% url 'catalog:category_detail' slug='patch' %}" class="mobile-nav-sublink">Patch</a>
-        <a href="{% url 'catalog:category_detail' slug='panel' %}" class="mobile-nav-sublink">Panel</a>
-        <a href="{% url 'catalog:category_detail' slug='moduli' %}" class="mobile-nav-link">Модулі</a>
-        <a href="{% url 'catalog:category_detail' slug='rf-detektory' %}" class="mobile-nav-sublink">RF Детектори</a>
-        <a href="{% url 'catalog:category_detail' slug='sdr-moduli' %}" class="mobile-nav-sublink">SDR Модулі</a>
-        <a href="{% url 'catalog:category_detail' slug='pidsylyuvachi' %}" class="mobile-nav-sublink">Підсилювачі</a>
-        <a href="https://t.me/antidrone_ukraine" target="_blank" class="mobile-nav-link">
-            <i class="bi bi-telegram"></i> @antidrone_ukraine
+        <a href="{% url 'catalog:category_list' %}" class="mobile-nav-link">Каталог</a>
+        <a href="{% url 'catalog:category_detail' slug='smartphones' %}" class="mobile-nav-link">📱 Смартфони</a>
+        <a href="{% url 'catalog:category_detail' slug='laptops-pk' %}" class="mobile-nav-link">💻 Ноутбуки / ПК</a>
+        <a href="{% url 'catalog:category_detail' slug='tablets' %}" class="mobile-nav-link">📟 Планшети</a>
+        <a href="{% url 'catalog:category_detail' slug='gaming' %}" class="mobile-nav-link">🎮 Ігрові приставки</a>
+        <a href="{% url 'catalog:category_detail' slug='accessories' %}" class="mobile-nav-link">🕹️ Аксесуари та ігри</a>
+        <a href="https://t.me/yar4ick_tech" target="_blank" class="mobile-nav-link">
+            <i class="bi bi-telegram"></i> @yar4ick_tech
         </a>
     </nav>
 
@@ -96,27 +105,23 @@
                 <div class="footer-column">
                     <h4 class="footer-title">Каталог</h4>
                     <ul class="footer-links">
-                        <li><a href="{% url 'catalog:category_detail' slug='anteny' %}">Антени</a></li>
-                        <li><a href="{% url 'catalog:category_detail' slug='directional' %}">Directional</a></li>
-                        <li><a href="{% url 'catalog:category_detail' slug='omni' %}">Omni-Directional</a></li>
-                        <li><a href="{% url 'catalog:category_detail' slug='moduli' %}">Модулі</a></li>
-                        <li><a href="{% url 'catalog:category_detail' slug='rf-detektory' %}">RF Детектори</a></li>
+                        <li><a href="{% url 'catalog:category_detail' slug='smartphones' %}">Смартфони</a></li>
+                        <li><a href="{% url 'catalog:category_detail' slug='laptops-pk' %}">Ноутбуки / ПК</a></li>
+                        <li><a href="{% url 'catalog:category_detail' slug='tablets' %}">Планшети</a></li>
+                        <li><a href="{% url 'catalog:category_detail' slug='gaming' %}">Ігрові приставки</a></li>
+                        <li><a href="{% url 'catalog:category_detail' slug='accessories' %}">Аксесуари та ігри</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-column">
                     <h4 class="footer-title">Контакти</h4>
                     <div class="footer-contact">
-                        <i class="bi bi-facebook"></i>
-                        <a href="https://www.facebook.com/antidrone.cc" target="_blank">Facebook</a>
+                        <i class="bi bi-telegram"></i>
+                        <a href="https://t.me/yar4ick_tech" target="_blank">Telegram</a>
                     </div>
                     <div class="footer-contact">
-                        <i class="bi bi-telegram"></i>
-                        <a href="https://t.me/herasymyuk" target="_blank">CEO Telegram</a>
-                    </div>
-                    <div class="footer-contact">
-                        <i class="bi bi-telegram"></i>
-                        <a href="https://t.me/antidrone_ukraine" target="_blank">Спільнота Telegram</a>
+                        <i class="bi bi-instagram"></i>
+                        <a href="#" target="_blank">Instagram</a>
                     </div>
                 </div>
 
@@ -131,7 +136,7 @@
 
             <div class="footer-bottom">
                 <p class="footer-copyright">
-                    &copy; 2026 ANTIDRONE.CC &bull; PROFESSIONAL UAV COUNTERMEASURES
+                    &copy; 2026 Yar4ick Technology &bull; ТЕХНІКА. ЯКІСТЬ. ДОВІРА.
                 </p>
             </div>
         </div>

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""ANTIDRONE Telegram bot for order intake flow with payment."""
+"""Yar4ick Technology Telegram bot for order intake flow with payment."""
 import html
 import asyncio
 import base64
@@ -570,7 +570,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
     await update.message.reply_text(
         f"Вітаємо, {user.first_name}! 👋\n\n"
-        f"Я бот магазину ANTIDRONE.CC\n\n"
+        f"Я бот магазину Yar4ick Technology\n\n"
         f"🔹 Щоб оформити замовлення, перейдіть на сайт, "
         f"додайте товари в кошик і натисніть «Оформити».\n\n"
         f"🔹 Або зв'яжіться з менеджером: {MANAGER_USERNAME}",
@@ -911,7 +911,7 @@ async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> N
 
 
 def main() -> None:
-    logger.info("Starting ANTIDRONE Order Bot...")
+    logger.info("Starting Yar4ick Technology Order Bot...")
 
     application = (
         Application.builder()

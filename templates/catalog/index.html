@@ -1,165 +1,624 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}ANTIDRONE.CC - Professional UAV Countermeasures{% endblock %}
+{% block title %}Yar4ick Technology — Техніка. Якість. Довіра.{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ============================================
+   SPLASH SCREEN — SLIDE TO UNLOCK
+   ============================================ */
+#splash-screen {
+    position: fixed;
+    inset: 0;
+    background: #0a0a0a;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+#splash-screen.hidden {
+    opacity: 0;
+    transform: translateY(-100%);
+    pointer-events: none;
+}
+
+.splash-logo {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.splash-brand {
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-weight: 900;
+    letter-spacing: 4px;
+    background: linear-gradient(135deg, #FF6600, #FF8800, #FFB347);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-transform: uppercase;
+    line-height: 1.1;
+    animation: brandPulse 3s ease-in-out infinite;
+}
+
+.splash-tagline {
+    font-size: clamp(0.85rem, 2vw, 1.1rem);
+    color: #888888;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    margin-top: 1rem;
+}
+
+@keyframes brandPulse {
+    0%, 100% { filter: drop-shadow(0 0 20px rgba(255, 102, 0, 0.4)); }
+    50% { filter: drop-shadow(0 0 40px rgba(255, 102, 0, 0.8)); }
+}
+
+/* Slide to unlock */
+.slide-container {
+    position: relative;
+    width: min(320px, 80vw);
+    height: 60px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 102, 0, 0.3);
+    border-radius: 30px;
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.slide-track {
+    position: absolute;
+    inset: 0;
+    border-radius: 30px;
+    background: linear-gradient(90deg, rgba(255, 102, 0, 0.15) 0%, transparent 100%);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.1s linear;
+}
+
+.slide-thumb {
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FF6600, #FF8800);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(255, 102, 0, 0.6);
+    transition: left 0.05s linear, box-shadow 0.3s ease;
+    z-index: 2;
+}
+
+.slide-thumb i {
+    color: #fff;
+    font-size: 1.4rem;
+}
+
+.slide-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+.slide-container.dragging .slide-text {
+    opacity: 0;
+}
+
+.slide-container.unlocked .slide-thumb {
+    box-shadow: 0 0 40px rgba(255, 102, 0, 1);
+}
+
+/* Animated particles */
+.splash-particles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: #FF6600;
+    border-radius: 50%;
+    animation: float linear infinite;
+    opacity: 0;
+}
+
+@keyframes float {
+    0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.4; }
+    100% { transform: translateY(-20px) translateX(30px); opacity: 0; }
+}
+
+/* ============================================
+   LANDING SECTION
+   ============================================ */
+#landing {
+    padding-top: 80px;
+}
+
+.landing-hero {
+    background: linear-gradient(180deg, #0a0a0a 0%, #111111 100%);
+    padding: 5rem 0 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.landing-hero::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(255, 102, 0, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.landing-brand {
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 900;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #FF6600, #FF8800, #FFB347);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+}
+
+.landing-tagline {
+    font-size: 1rem;
+    color: #888;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    margin-bottom: 2.5rem;
+}
+
+/* Category cards grid */
+.categories-landing {
+    padding: 4rem 0 5rem;
+    background: #0a0a0a;
+}
+
+.categories-landing-title {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: #ffffff;
+    margin-bottom: 0.75rem;
+}
+
+.categories-landing-title span {
+    color: #FF6600;
+}
+
+.categories-landing-divider {
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, #FF6600, transparent);
+    margin: 0 auto 3rem;
+    box-shadow: 0 0 20px rgba(255, 102, 0, 0.4);
+}
+
+.categories-landing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.cat-card {
+    background: #1a1a1a;
+    border: 1px solid #1a1500;
+    border-radius: 16px;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    text-decoration: none;
+    color: #ffffff;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.cat-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(255, 102, 0, 0.07) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    border-radius: 16px;
+}
+
+.cat-card:hover {
+    border-color: #FF6600;
+    transform: scale(1.04) translateY(-4px);
+    box-shadow: 0 8px 30px rgba(255, 102, 0, 0.3);
+    color: #ffffff;
+}
+
+.cat-card:hover::before {
+    opacity: 1;
+}
+
+.cat-card-icon {
+    font-size: 3.5rem;
+    margin-bottom: 1.25rem;
+    display: block;
+    transition: transform 0.3s;
+    filter: drop-shadow(0 0 10px rgba(255, 102, 0, 0.3));
+}
+
+.cat-card:hover .cat-card-icon {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 20px rgba(255, 102, 0, 0.6));
+}
+
+.cat-card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+}
+
+.cat-card-desc {
+    font-size: 0.8rem;
+    color: #666;
+    letter-spacing: 0.5px;
+}
+
+.cat-card:hover .cat-card-title {
+    color: #FF8800;
+}
+
+/* Popular products section */
+.landing-products {
+    padding: 4rem 0;
+    background: #111111;
+}
+</style>
+{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-<section class="hero">
-    <div class="hero-background"></div>
-    <div class="hero-content">
-        <h1 class="hero-title">ANTIDRONE<span class="accent">.CC</span></h1>
-        <p class="hero-subtitle">Професійні системи протидії БПЛА</p>
-        <p class="hero-description">B2B рішення для виявлення та нейтралізації дронів.</p>
-        <p class="hero-description">Зручне замовлення через Telegram.</p>
+
+<!-- SPLASH SCREEN -->
+<div id="splash-screen">
+    <div class="splash-particles" id="particles"></div>
+
+    <div class="splash-logo">
+        <div class="splash-brand">Yar4ick Technology</div>
+        <div class="splash-tagline">Техніка &bull; Якість &bull; Довіра</div>
+    </div>
+
+    <div class="slide-container" id="slideContainer">
+        <div class="slide-track" id="slideTrack"></div>
+        <div class="slide-thumb" id="slideThumb">
+            <i class="bi bi-chevron-double-right"></i>
+        </div>
+        <div class="slide-text">→ slide to unlock</div>
+    </div>
+</div>
+
+<!-- LANDING PAGE -->
+<div id="landing" style="display: none;">
+
+    <!-- Hero -->
+    <section class="landing-hero">
+        <div class="landing-brand">Yar4ick Technology</div>
+        <div class="landing-tagline">Техніка &bull; Якість &bull; Довіра</div>
         <a href="{% url 'catalog:category_list' %}" class="btn btn-primary btn-lg">
             <i class="bi bi-grid-3x3-gap"></i>
-            Переглянути каталог
+            Переглянути весь каталог
         </a>
-    </div>
-</section>
+    </section>
 
-<!-- About -->
-<section class="section section-dark" id="about">
-    <div class="container">
-        <h2 class="section-title"><span>Про</span> нас</h2>
-        <div class="section-divider"></div>
-        <p>ANTIDRONE — професійні рішення протидії БПЛА.</p>
-        <p>Ми спеціалізуємось на обладнанні та комплектуючих для систем виявлення й протидії дронам: антени, модулі, RF-компоненти та вузли живлення.</p>
-        <p>Працюємо практично: підбираємо сумісні позиції під ваші частоти, типи підключень і сценарії використання — від стаціонарних систем до мобільних комплектів.</p>
-    </div>
-</section>
+    <!-- Categories -->
+    <section class="categories-landing">
+        <div class="categories-landing-title"><span>Категорії</span> товарів</div>
+        <div class="categories-landing-divider"></div>
+        <div class="categories-landing-grid">
 
-<!-- Popular Products -->
-{% if popular_products %}
-<section class="section">
-    <div class="container">
-        <h2 class="section-title"><span>Популярні</span> рішення</h2>
-        <div class="section-divider"></div>
-
-        <div class="products-grid">
-            {% for product in popular_products %}
-            <article class="product-card" data-product-url="{{ product.get_absolute_url }}">
-                <div class="product-card-image">
-                    {% with main_image=product.get_main_image %}
-                    {% if main_image %}
-                    <img src="{{ main_image.image.url }}" alt="{{ product.name }}">
-                    {% else %}
-                    <span class="product-card-placeholder">NO IMAGE</span>
-                    {% endif %}
-                    {% endwith %}
-                    <span class="product-badge badge-popular">Popular</span>
-                </div>
-                <div class="product-card-body">
-                    <h3 class="product-card-title">
-                        <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
-                    </h3>
-                    {% if product.description %}
-                    <p class="product-card-description">{{ product.description|truncatewords:12 }}</p>
-                    {% endif %}
-                    <div class="product-card-footer">
-                        <div class="product-price">
-                            {% if product.price %}
-                            <span class="product-price-current">{{ product.price|floatformat:0 }} UAH</span>
-                            {% endif %}
-                        </div>
-                        <button type="button" class="btn btn-primary btn-sm js-add-to-cart"
-                            data-product-id="{{ product.id }}"
-                            data-name="{{ product.name }}"
-                            data-sku="{{ product.sku|default:'' }}"
-                            data-price="{{ product.price|floatformat:0|default:'0' }}"
-                            data-image="{% with main_image=product.get_main_image %}{% if main_image %}{{ main_image.image.url }}{% endif %}{% endwith %}"
-                            data-url="{{ product.get_absolute_url }}">
-                            <i class="bi bi-cart-plus"></i> В кошик
-                        </button>
-                    </div>
-                </div>
-            </article>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-{% endif %}
-
-<!-- New Products -->
-{% if new_products %}
-<section class="section section-dark">
-    <div class="container">
-        <h2 class="section-title"><span>Новинки</span></h2>
-        <div class="section-divider"></div>
-
-        <div class="products-grid">
-            {% for product in new_products %}
-            <article class="product-card" data-product-url="{{ product.get_absolute_url }}">
-                <div class="product-card-image">
-                    {% with main_image=product.get_main_image %}
-                    {% if main_image %}
-                    <img src="{{ main_image.image.url }}" alt="{{ product.name }}">
-                    {% else %}
-                    <span class="product-card-placeholder">NO IMAGE</span>
-                    {% endif %}
-                    {% endwith %}
-                    <span class="product-badge badge-new">New</span>
-                </div>
-                <div class="product-card-body">
-                    <h3 class="product-card-title">
-                        <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
-                    </h3>
-                    {% if product.description %}
-                    <p class="product-card-description">{{ product.description|truncatewords:12 }}</p>
-                    {% endif %}
-                    <div class="product-card-footer">
-                        <div class="product-price">
-                            {% if product.price %}
-                            <span class="product-price-current">{{ product.price|floatformat:0 }} UAH</span>
-                            {% endif %}
-                        </div>
-                        <button type="button" class="btn btn-primary btn-sm js-add-to-cart"
-                            data-product-id="{{ product.id }}"
-                            data-name="{{ product.name }}"
-                            data-sku="{{ product.sku|default:'' }}"
-                            data-price="{{ product.price|floatformat:0|default:'0' }}"
-                            data-image="{% with main_image=product.get_main_image %}{% if main_image %}{{ main_image.image.url }}{% endif %}{% endwith %}"
-                            data-url="{{ product.get_absolute_url }}">
-                            <i class="bi bi-cart-plus"></i> В кошик
-                        </button>
-                    </div>
-                </div>
-            </article>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-{% endif %}
-
-<!-- Categories -->
-{% if categories %}
-<section class="section">
-    <div class="container">
-        <h2 class="section-title"><span>Категорії</span> обладнання</h2>
-        <div class="section-divider"></div>
-
-        <div class="categories-grid">
-            {% for category in categories %}
-            <a href="{{ category.get_absolute_url }}" class="category-card">
-                <div class="category-icon">
-                    {% if category.slug == 'anteny' %}
-                    <i class="bi bi-broadcast-pin"></i>
-                    {% elif category.slug == 'moduli' %}
-                    <i class="bi bi-cpu"></i>
-                    {% else %}
-                    <i class="bi bi-box"></i>
-                    {% endif %}
-                </div>
-                <h3 class="category-title">{{ category.name }}</h3>
-                {% if category.description %}
-                <p class="category-description">{{ category.description|truncatewords:15 }}</p>
-                {% endif %}
-                <span class="category-count">{{ category.get_descendant_count }} підкатегорій</span>
+            <a href="{% url 'catalog:category_detail' slug='smartphones' %}" class="cat-card">
+                <span class="cat-card-icon">📱</span>
+                <div class="cat-card-title">Смартфони</div>
+                <div class="cat-card-desc">iPhone, Samsung, Xiaomi та інші</div>
             </a>
-            {% endfor %}
+
+            <a href="{% url 'catalog:category_detail' slug='laptops-pk' %}" class="cat-card">
+                <span class="cat-card-icon">💻</span>
+                <div class="cat-card-title">Ноутбуки / ПК</div>
+                <div class="cat-card-desc">MacBook, ASUS, MSI, комп'ютери</div>
+            </a>
+
+            <a href="{% url 'catalog:category_detail' slug='tablets' %}" class="cat-card">
+                <span class="cat-card-icon">📟</span>
+                <div class="cat-card-title">Планшети</div>
+                <div class="cat-card-desc">iPad, Galaxy Tab та інші</div>
+            </a>
+
+            <a href="{% url 'catalog:category_detail' slug='gaming' %}" class="cat-card">
+                <span class="cat-card-icon">🎮</span>
+                <div class="cat-card-title">Ігрові приставки</div>
+                <div class="cat-card-desc">Xbox, PlayStation, Nintendo</div>
+            </a>
+
+            <a href="{% url 'catalog:category_detail' slug='accessories' %}" class="cat-card">
+                <span class="cat-card-icon">🕹️</span>
+                <div class="cat-card-title">Аксесуари та ігри</div>
+                <div class="cat-card-desc">Контролери, ігри, периферія</div>
+            </a>
+
         </div>
-    </div>
-</section>
-{% endif %}
+    </section>
+
+    <!-- Popular Products -->
+    {% if popular_products %}
+    <section class="landing-products">
+        <div class="container">
+            <h2 class="section-title"><span>Популярні</span> товари</h2>
+            <div class="section-divider"></div>
+            <div class="products-grid">
+                {% for product in popular_products %}
+                <article class="product-card" data-product-url="{{ product.get_absolute_url }}">
+                    <div class="product-card-image">
+                        {% with main_image=product.get_main_image %}
+                        {% if main_image %}
+                        <img src="{{ main_image.image.url }}" alt="{{ product.name }}">
+                        {% else %}
+                        <span class="product-card-placeholder">NO IMAGE</span>
+                        {% endif %}
+                        {% endwith %}
+                        <span class="product-badge badge-popular">Popular</span>
+                    </div>
+                    <div class="product-card-body">
+                        <h3 class="product-card-title">
+                            <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+                        </h3>
+                        {% if product.description %}
+                        <p class="product-card-description">{{ product.description|truncatewords:12 }}</p>
+                        {% endif %}
+                        <div class="product-card-footer">
+                            <div class="product-price">
+                                {% if product.price %}
+                                <span class="product-price-current">{{ product.price|floatformat:0 }} UAH</span>
+                                {% endif %}
+                            </div>
+                            <button type="button" class="btn btn-primary btn-sm js-add-to-cart"
+                                data-product-id="{{ product.id }}"
+                                data-name="{{ product.name }}"
+                                data-sku="{{ product.sku|default:'' }}"
+                                data-price="{{ product.price|floatformat:0|default:'0' }}"
+                                data-image="{% with main_image=product.get_main_image %}{% if main_image %}{{ main_image.image.url }}{% endif %}{% endwith %}"
+                                data-url="{{ product.get_absolute_url }}">
+                                <i class="bi bi-cart-plus"></i> В кошик
+                            </button>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- New Products -->
+    {% if new_products %}
+    <section class="section section-dark">
+        <div class="container">
+            <h2 class="section-title"><span>Новинки</span></h2>
+            <div class="section-divider"></div>
+            <div class="products-grid">
+                {% for product in new_products %}
+                <article class="product-card" data-product-url="{{ product.get_absolute_url }}">
+                    <div class="product-card-image">
+                        {% with main_image=product.get_main_image %}
+                        {% if main_image %}
+                        <img src="{{ main_image.image.url }}" alt="{{ product.name }}">
+                        {% else %}
+                        <span class="product-card-placeholder">NO IMAGE</span>
+                        {% endif %}
+                        {% endwith %}
+                        <span class="product-badge badge-new">New</span>
+                    </div>
+                    <div class="product-card-body">
+                        <h3 class="product-card-title">
+                            <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+                        </h3>
+                        {% if product.description %}
+                        <p class="product-card-description">{{ product.description|truncatewords:12 }}</p>
+                        {% endif %}
+                        <div class="product-card-footer">
+                            <div class="product-price">
+                                {% if product.price %}
+                                <span class="product-price-current">{{ product.price|floatformat:0 }} UAH</span>
+                                {% endif %}
+                            </div>
+                            <button type="button" class="btn btn-primary btn-sm js-add-to-cart"
+                                data-product-id="{{ product.id }}"
+                                data-name="{{ product.name }}"
+                                data-sku="{{ product.sku|default:'' }}"
+                                data-price="{{ product.price|floatformat:0|default:'0' }}"
+                                data-image="{% with main_image=product.get_main_image %}{% if main_image %}{{ main_image.image.url }}{% endif %}{% endwith %}"
+                                data-url="{{ product.get_absolute_url }}">
+                                <i class="bi bi-cart-plus"></i> В кошик
+                            </button>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- About -->
+    <section class="section section-dark">
+        <div class="container">
+            <h2 class="section-title"><span>Про</span> нас</h2>
+            <div class="section-divider"></div>
+            <p>Yar4ick Technology — твій надійний магазин техніки.</p>
+            <p>Ми пропонуємо широкий асортимент електроніки: смартфони, ноутбуки, планшети, ігрові приставки та аксесуари від провідних світових брендів.</p>
+            <p>Зручне замовлення через сайт або Telegram. Швидка доставка по всій Україні.</p>
+        </div>
+    </section>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function() {
+    // Generate particles
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 25; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.animationDuration = (4 + Math.random() * 8) + 's';
+        p.style.animationDelay = (Math.random() * 6) + 's';
+        p.style.width = p.style.height = (1 + Math.random() * 3) + 'px';
+        container.appendChild(p);
+    }
+
+    const splash = document.getElementById('splash-screen');
+    const landing = document.getElementById('landing');
+    const thumb = document.getElementById('slideThumb');
+    const track = document.getElementById('slideTrack');
+    const slideContainer = document.getElementById('slideContainer');
+
+    const TRACK_WIDTH = slideContainer.offsetWidth || 320;
+    const THUMB_SIZE = 52 + 8; // width + padding
+    const MAX_LEFT = TRACK_WIDTH - THUMB_SIZE;
+    const UNLOCK_THRESHOLD = 0.85;
+
+    let isDragging = false;
+    let startX = 0;
+    let currentLeft = 0;
+
+    function unlock() {
+        slideContainer.classList.add('unlocked');
+        thumb.style.left = MAX_LEFT + 'px';
+        track.style.transform = 'scaleX(1)';
+
+        setTimeout(() => {
+            splash.classList.add('hidden');
+            landing.style.display = 'block';
+            document.body.style.overflow = '';
+            // Save to sessionStorage so splash doesn't show again on back navigation
+            sessionStorage.setItem('yar4ick_unlocked', '1');
+        }, 500);
+    }
+
+    function setPosition(x) {
+        const left = Math.max(0, Math.min(x, MAX_LEFT));
+        currentLeft = left;
+        thumb.style.left = (left + 4) + 'px';
+        track.style.transform = `scaleX(${left / MAX_LEFT})`;
+        if (left / MAX_LEFT >= UNLOCK_THRESHOLD) {
+            unlock();
+        }
+    }
+
+    // Touch events
+    thumb.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        startX = e.touches[0].clientX - currentLeft;
+        slideContainer.classList.add('dragging');
+    }, { passive: true });
+
+    document.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        setPosition(e.touches[0].clientX - startX);
+    }, { passive: true });
+
+    document.addEventListener('touchend', () => {
+        if (!isDragging) return;
+        isDragging = false;
+        slideContainer.classList.remove('dragging');
+        if (currentLeft / MAX_LEFT < UNLOCK_THRESHOLD) {
+            // Snap back
+            thumb.style.transition = 'left 0.3s ease';
+            track.style.transition = 'transform 0.3s ease';
+            setPosition(0);
+            setTimeout(() => {
+                thumb.style.transition = '';
+                track.style.transition = '';
+            }, 300);
+        }
+    });
+
+    // Mouse events
+    thumb.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX - currentLeft;
+        slideContainer.classList.add('dragging');
+        e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        setPosition(e.clientX - startX);
+    });
+
+    document.addEventListener('mouseup', () => {
+        if (!isDragging) return;
+        isDragging = false;
+        slideContainer.classList.remove('dragging');
+        if (currentLeft / MAX_LEFT < UNLOCK_THRESHOLD) {
+            thumb.style.transition = 'left 0.3s ease';
+            track.style.transition = 'transform 0.3s ease';
+            setPosition(0);
+            setTimeout(() => {
+                thumb.style.transition = '';
+                track.style.transition = '';
+            }, 300);
+        }
+    });
+
+    // Click on container — instant unlock (for desktop convenience)
+    slideContainer.addEventListener('click', (e) => {
+        if (e.target === slideContainer || e.target.classList.contains('slide-text')) {
+            unlock();
+        }
+    });
+
+    // Check if already unlocked in this session
+    if (sessionStorage.getItem('yar4ick_unlocked')) {
+        splash.style.display = 'none';
+        landing.style.display = 'block';
+    } else {
+        document.body.style.overflow = 'hidden';
+    }
+})();
+</script>
 {% endblock %}

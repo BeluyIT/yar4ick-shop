@@ -1,1 +1,1 @@
-# ANTIDRONE Telegram Bot Package
+# Yar4ick Technology Telegram Bot Package

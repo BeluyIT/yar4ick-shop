@@ -1,19 +1,19 @@
 /* ============================================
-   ANTIDRONE - Military-Tech Design System
+   Yar4ick Technology Design System
    ============================================ */
 
 /* ---- CSS Variables ---- */
 :root {
     /* Background colors */
-    --bg-primary: #0a0f0a;
-    --bg-secondary: #0d120d;
-    --bg-card: #141914;
-    --bg-card-hover: #1a1f1a;
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #111111;
+    --bg-card: #1a1a1a;
+    --bg-card-hover: #222222;
 
-    /* Accent colors - Neon Green */
-    --accent-primary: #39ff14;
-    --accent-secondary: #00ff88;
-    --accent-dim: #2a4a2a;
+    /* Accent colors - Orange */
+    --accent-primary: #FF6600;
+    --accent-secondary: #FF8800;
+    --accent-dim: #331a00;
 
     /* Text colors */
     --text-primary: #e0e0e0;
@@ -21,14 +21,14 @@
     --text-muted: #606060;
 
     /* Borders */
-    --border-color: #2a4a2a;
-    --border-glow: rgba(57, 255, 20, 0.3);
+    --border-color: #2a1500;
+    --border-glow: rgba(255, 102, 0, 0.3);
 
     /* Shadows & Glows */
-    --glow-primary: 0 0 20px rgba(57, 255, 20, 0.4);
-    --glow-intense: 0 0 30px rgba(57, 255, 20, 0.6);
+    --glow-primary: 0 0 20px rgba(255, 102, 0, 0.4);
+    --glow-intense: 0 0 30px rgba(255, 102, 0, 0.6);
     --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.5);
-    --shadow-card-hover: 0 8px 30px rgba(57, 255, 20, 0.3);
+    --shadow-card-hover: 0 8px 30px rgba(255, 102, 0, 0.3);
 
     /* Typography */
     --font-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
@@ -72,15 +72,15 @@ body::before {
             0deg,
             transparent,
             transparent 50px,
-            rgba(57, 255, 20, 0.02) 50px,
-            rgba(57, 255, 20, 0.02) 51px
+            rgba(255, 102, 0, 0.02) 50px,
+            rgba(255, 102, 0, 0.02) 51px
         ),
         repeating-linear-gradient(
             90deg,
             transparent,
             transparent 50px,
-            rgba(57, 255, 20, 0.02) 50px,
-            rgba(57, 255, 20, 0.02) 51px
+            rgba(255, 102, 0, 0.02) 50px,
+            rgba(255, 102, 0, 0.02) 51px
         );
     pointer-events: none;
     z-index: 0;
@@ -153,10 +153,10 @@ h1, h2, h3, h4, h5, h6 {
     left: 0;
     right: 0;
     height: 80px;
-    background: rgba(13, 18, 13, 0.95);
+    background: rgba(10, 10, 10, 0.95);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border-color);
-    box-shadow: 0 2px 20px rgba(57, 255, 20, 0.1);
+    box-shadow: 0 2px 20px rgba(255, 102, 0, 0.1);
     z-index: 1000;
     display: flex;
     align-items: center;
@@ -174,7 +174,7 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 900;
     letter-spacing: 3px;
     color: var(--text-primary);
-    text-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
+    text-shadow: 0 0 10px rgba(255, 102, 0, 0.3);
     display: flex;
     align-items: center;
     gap: 10px;
@@ -331,7 +331,7 @@ h1, h2, h3, h4, h5, h6 {
     top: 80px;
     left: 0;
     right: 0;
-    background: rgba(13, 18, 13, 0.98);
+    background: rgba(10, 10, 10, 0.98);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border-color);
     padding: 1rem 0;
@@ -367,7 +367,7 @@ h1, h2, h3, h4, h5, h6 {
     padding: 0.75rem 20px 0.75rem 36px;
     color: var(--text-secondary);
     font-size: 0.85rem;
-    border-bottom: 1px solid rgba(42, 74, 42, 0.5);
+    border-bottom: 1px solid rgba(42, 26, 0, 0.5);
     transition: all var(--transition-smooth);
 }
 
@@ -410,7 +410,7 @@ h1, h2, h3, h4, h5, h6 {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(5, 15, 5, 0.85), rgba(10, 25, 10, 0.75));
+    background: linear-gradient(135deg, rgba(10, 10, 10, 0.85), rgba(17, 17, 17, 0.75));
     z-index: 0;
 }
 
@@ -433,7 +433,7 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 900;
     letter-spacing: 8px;
     margin-bottom: 1.5rem;
-    text-shadow: 0 0 30px rgba(57, 255, 20, 0.3);
+    text-shadow: 0 0 30px rgba(255, 102, 0, 0.3);
 }
 
 .hero-title .accent {
@@ -541,7 +541,7 @@ h1, h2, h3, h4, h5, h6 {
 .product-card-image {
     position: relative;
     height: 200px;
-    background: linear-gradient(135deg, #1a1f1a 0%, #0a0f0a 100%);
+    background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -620,8 +620,8 @@ h1, h2, h3, h4, h5, h6 {
     border: 1px solid var(--border-color);
     border-radius: 6px;
     overflow: hidden;
-    background: rgba(13, 18, 13, 0.6);
-    box-shadow: 0 0 12px rgba(57, 255, 20, 0.12);
+    background: rgba(10, 10, 10, 0.6);
+    box-shadow: 0 0 12px rgba(255, 102, 0, 0.12);
 }
 
 .cart-thumb img {
@@ -634,7 +634,7 @@ h1, h2, h3, h4, h5, h6 {
 .cart-thumb-placeholder {
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, rgba(20, 28, 20, 0.9), rgba(10, 15, 10, 0.9));
+    background: linear-gradient(135deg, rgba(20, 20, 20, 0.9), rgba(10, 10, 10, 0.9));
 }
 
 .cart-title {
@@ -727,7 +727,7 @@ h1, h2, h3, h4, h5, h6 {
     border: 1px dashed var(--border-color);
     border-radius: 8px;
     color: var(--text-secondary);
-    background: rgba(13, 18, 13, 0.6);
+    background: rgba(10, 10, 10, 0.6);
 }
 
 .cart-empty-text {
@@ -785,7 +785,7 @@ body.modal-open {
 .checkout-modal-backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(5, 8, 5, 0.88);
+    background: rgba(5, 5, 5, 0.88);
     backdrop-filter: blur(6px);
     opacity: 0;
     height: 100dvh; 
@@ -800,11 +800,11 @@ body.modal-open {
     padding: 1.25rem;
     max-height: 60vh;
     overflow: hidden;
-    background: rgba(20, 25, 20, 0.92);
+    background: rgba(20, 20, 20, 0.92);
     backdrop-filter: blur(8px);
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    box-shadow: var(--shadow-card), 0 0 18px rgba(57, 255, 20, 0.16);
+    box-shadow: var(--shadow-card), 0 0 18px rgba(255, 102, 0, 0.16);
     z-index: 1;
     display: flex;
     flex-direction: column;
@@ -833,11 +833,11 @@ body.modal-open {
     height: 44px;
     border-radius: 12px;
     border: 1px solid var(--border-color);
-    background: rgba(57, 255, 20, 0.12);
+    background: rgba(255, 102, 0, 0.12);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 14px rgba(57, 255, 20, 0.25);
+    box-shadow: 0 0 14px rgba(255, 102, 0, 0.25);
 }
 
 .checkout-modal-icon svg {
@@ -918,12 +918,12 @@ body.modal-open {
 }
 
 .checkout-modal-items::-webkit-scrollbar-thumb {
-    background: rgba(57, 255, 20, 0.25);
+    background: rgba(255, 102, 0, 0.25);
     border-radius: 999px;
 }
 
 .checkout-modal-items::-webkit-scrollbar-thumb:hover {
-    background: rgba(57, 255, 20, 0.4);
+    background: rgba(255, 102, 0, 0.4);
 }
 
 .checkout-modal-row {
@@ -933,7 +933,7 @@ body.modal-open {
     gap: 0.75rem;
     font-size: 0.9rem;
     padding: 0.45rem 0;
-    border-bottom: 1px solid rgba(57, 255, 20, 0.14);
+    border-bottom: 1px solid rgba(255, 102, 0, 0.14);
 }
 
 .checkout-modal-row:last-child {
@@ -1002,17 +1002,17 @@ body.modal-open {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.8px;
-    box-shadow: 0 0 10px rgba(57, 255, 20, 0.12);
+    box-shadow: 0 0 10px rgba(255, 102, 0, 0.12);
 }
 
 .checkout-modal-actions .btn:hover {
-    background: rgba(57, 255, 20, 0.08);
+    background: rgba(255, 102, 0, 0.08);
     color: var(--accent-primary);
-    box-shadow: 0 0 14px rgba(57, 255, 20, 0.2);
+    box-shadow: 0 0 14px rgba(255, 102, 0, 0.2);
 }
 
 .checkout-modal-actions .btn:active {
-    background: rgba(57, 255, 20, 0.12);
+    background: rgba(255, 102, 0, 0.12);
 }
 
 @media (max-width: 640px) {
@@ -1127,7 +1127,7 @@ body.modal-open {
     font-size: 1.1rem;
     font-weight: 700;
     color: var(--accent-primary);
-    text-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
+    text-shadow: 0 0 10px rgba(255, 102, 0, 0.3);
 }
 
 
@@ -1163,7 +1163,7 @@ body.modal-open {
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at center, rgba(57, 255, 20, 0.05) 0%, transparent 70%);
+    background: radial-gradient(circle at center, rgba(255, 102, 0, 0.05) 0%, transparent 70%);
     opacity: 0;
     transition: opacity var(--transition-smooth);
 }
@@ -2166,15 +2166,15 @@ img {
 @keyframes neon-glow {
     0%, 100% {
         box-shadow:
-            0 0 3px rgba(57, 255, 20, 0.2),
-            0 0 6px rgba(57, 255, 20, 0.15),
-            0 0 12px rgba(57, 255, 20, 0.1);
+            0 0 3px rgba(255, 102, 0, 0.2),
+            0 0 6px rgba(255, 102, 0, 0.15),
+            0 0 12px rgba(255, 102, 0, 0.1);
     }
     50% {
         box-shadow:
-            0 0 5px rgba(57, 255, 20, 0.3),
-            0 0 10px rgba(57, 255, 20, 0.2),
-            0 0 20px rgba(57, 255, 20, 0.15);
+            0 0 5px rgba(255, 102, 0, 0.3),
+            0 0 10px rgba(255, 102, 0, 0.2),
+            0 0 20px rgba(255, 102, 0, 0.15);
     }
 }
 

@@ -117,7 +117,7 @@ async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_data.reset()
     await update.message.reply_text(
         f"👋 Вітаємо, *{user.first_name}*!\n\n"
-        f"Я бот магазину *ANTIDRONE.CC* — професійні системи протидії БПЛА.\n\n"
+        f"Я бот магазину *Yar4ick Technology* — техніка, якість, довіра.\n\n"
         f"🔹 Щоб оформити замовлення, перейдіть на сайт, додайте товари в кошик "
         f"і натисніть «Оформити замовлення».\n\n"
         f"🔹 Або зв'яжіться з менеджером напряму: {MANAGER_USERNAME}",
