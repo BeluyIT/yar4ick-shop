@@ -1,32 +1,229 @@
 {% extends 'base.html' %}
+{% load catalog_tags %}
 
 {% block title %}{{ category.name }} — Yar4ick Technology{% endblock %}
 
+{% block extra_css %}
+<style>
+.cat-detail-page { margin-top: 80px; padding: 2.5rem 0 5rem; }
+
+/* ---- Subcategory cards (same style as catalog page) ---- */
+.subcats-section { margin-bottom: 2.5rem; }
+.subcats-section h2 {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #555;
+    margin: 0 0 1rem;
+}
+
+.subcats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.85rem;
+}
+@media (min-width: 480px)  { .subcats-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 720px)  { .subcats-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 1024px) { .subcats-grid { grid-template-columns: repeat(6, 1fr); } }
+
+.subcat-card {
+    background: #141414;
+    border: 1px solid #1e1e1e;
+    border-radius: 14px;
+    padding: 1.25rem 0.75rem 1rem;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.45rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+    -webkit-tap-highlight-color: transparent;
+}
+.subcat-card::before, .subcat-card::after {
+    content: '';
+    position: absolute;
+    width: 28px; height: 28px;
+    transition: width 0.3s, height 0.3s, border-color 0.3s;
+}
+.subcat-card::before {
+    top: 0; left: 0;
+    border-top: 1.5px solid transparent;
+    border-left: 1.5px solid transparent;
+    border-radius: 14px 0 0 0;
+}
+.subcat-card::after {
+    bottom: 0; right: 0;
+    border-bottom: 1.5px solid transparent;
+    border-right: 1.5px solid transparent;
+    border-radius: 0 0 14px 0;
+}
+.subcat-card:hover::before,
+.subcat-card:hover::after {
+    width: 42px; height: 42px;
+    border-color: var(--accent-primary);
+}
+.subcat-card:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.5), 0 0 18px rgba(255,102,0,0.08);
+    border-color: rgba(255,102,0,0.2);
+}
+
+.subcat-icon-wrap {
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,102,0,0.07);
+    border: 1.5px solid rgba(255,102,0,0.12);
+    transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
+}
+.subcat-card:hover .subcat-icon-wrap {
+    transform: scale(1.12) rotate(6deg);
+    box-shadow: 0 0 18px rgba(255,102,0,0.3);
+    background: rgba(255,102,0,0.14);
+}
+.subcat-icon-wrap i { font-size: 1.4rem; color: #FF6600; }
+
+.subcat-name {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #ccc;
+    transition: color 0.25s;
+    line-height: 1.3;
+}
+.subcat-card:hover .subcat-name { color: #FF8800; }
+
+/* ---- Layout ---- */
+.cat-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+@media (max-width: 860px) { .cat-layout { grid-template-columns: 1fr; } }
+
+/* ---- Sidebar ---- */
+.cat-sidebar { position: sticky; top: 100px; }
+@media (max-width: 860px) { .cat-sidebar { position: static; } }
+.sidebar-card {
+    background: #141414;
+    border: 1px solid #1e1e1e;
+    border-radius: 12px;
+    overflow: hidden;
+}
+.sidebar-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #1e1e1e;
+}
+.sidebar-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #FF6600;
+    margin: 0;
+}
+.sidebar-body { padding: 1.25rem; }
+.sidebar-description { color: #666; font-size: 0.85rem; line-height: 1.6; margin-bottom: 1rem; }
+
+.subcategory-list { list-style: none; padding: 0; margin: 0; }
+.subcategory-item { border-bottom: 1px solid #1a1a1a; }
+.subcategory-item:last-child { border-bottom: none; }
+.subcategory-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 0;
+    color: #888;
+    font-size: 0.85rem;
+    transition: color 0.2s, padding-left 0.2s;
+}
+.subcategory-link i { font-size: 0.9rem; color: #333; transition: color 0.2s; }
+.subcategory-link:hover { color: #FF6600; padding-left: 6px; }
+.subcategory-link:hover i { color: #FF6600; }
+
+/* ---- Products header ---- */
+.cat-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+.cat-title-main {
+    font-size: 1.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #fff;
+    margin: 0;
+}
+.products-count {
+    font-size: 0.75rem;
+    color: #FF6600;
+    background: rgba(255,102,0,0.1);
+    border: 1px solid rgba(255,102,0,0.2);
+    padding: 3px 12px;
+    border-radius: 20px;
+}
+
+/* ---- Products grid ---- */
+.category-products-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+@media (min-width: 640px)  { .category-products-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1100px) { .category-products-grid { grid-template-columns: repeat(4, 1fr); } }
+
+/* fade-in */
+.js-fade {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+}
+.js-fade.is-visible { opacity: 1; transform: none; }
+
+/* ---- Colored hover glow (uses --cat-color set inline on each card) ---- */
+.subcat-card:hover {
+    border-color: var(--cat-color, #FF6600);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.5), 0 0 0 1px var(--cat-color, #FF6600), 0 0 20px color-mix(in srgb, var(--cat-color, #FF6600) 30%, transparent);
+}
+.subcat-card:hover::before,
+.subcat-card:hover::after {
+    border-color: var(--cat-color, #FF6600);
+}
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="category-page">
+<div class="cat-detail-page">
     <div class="container">
-        <!-- Breadcrumbs -->
+
         <nav class="breadcrumbs">
-            <span class="breadcrumb-item">
-                <a href="{% url 'catalog:index' %}">Головна</a>
-            </span>
+            <span class="breadcrumb-item"><a href="{% url 'catalog:index' %}">Головна</a></span>
             <span class="breadcrumb-separator">/</span>
-            <span class="breadcrumb-item">
-                <a href="{% url 'catalog:category_list' %}">Каталог</a>
-            </span>
+            <span class="breadcrumb-item"><a href="{% url 'catalog:category_list' %}">Каталог</a></span>
             {% for ancestor in ancestors %}
             <span class="breadcrumb-separator">/</span>
-            <span class="breadcrumb-item">
-                <a href="{{ ancestor.get_absolute_url }}">{{ ancestor.name }}</a>
-            </span>
+            <span class="breadcrumb-item"><a href="{{ ancestor.get_absolute_url }}">{{ ancestor.name }}</a></span>
             {% endfor %}
             <span class="breadcrumb-separator">/</span>
             <span class="breadcrumb-item active">{{ category.name }}</span>
         </nav>
 
-        <div class="category-layout">
+        <div class="cat-layout">
+
             <!-- Sidebar -->
-            <aside class="category-sidebar">
+            <aside class="cat-sidebar">
                 <div class="sidebar-card">
                     <div class="sidebar-header">
                         <h2 class="sidebar-title">{{ category.name }}</h2>
@@ -37,11 +234,12 @@
                         {% endif %}
 
                         {% if subcategories %}
-                        <h3 class="sidebar-title" style="font-size: 0.85rem; margin-bottom: 1rem;">Підкатегорії</h3>
+                        <p style="font-size:0.72rem;color:#444;text-transform:uppercase;letter-spacing:2px;margin-bottom:0.75rem;">Підкатегорії</p>
                         <ul class="subcategory-list">
                             {% for sub in subcategories %}
                             <li class="subcategory-item">
                                 <a href="{{ sub.get_absolute_url }}" class="subcategory-link">
+                                    <i class="bi {{ sub.slug|category_icon }}" style="color:{{ sub.slug|category_color }}"></i>
                                     {{ sub.name }}
                                 </a>
                             </li>
@@ -52,29 +250,50 @@
                 </div>
             </aside>
 
-            <!-- Products -->
-            <div class="category-content">
-                <div class="category-header">
-                    <h1 class="category-title-main">{{ category.name }}</h1>
+            <!-- Content -->
+            <div class="cat-content">
+
+                <!-- Subcategory cards grid (if has subcategories) -->
+                {% if subcategories %}
+                <div class="subcats-section js-fade">
+                    <h2>Підкатегорії</h2>
+                    <div class="subcats-grid">
+                        {% for sub in subcategories %}
+                        <a href="{{ sub.get_absolute_url }}" class="subcat-card" style="--cat-color:{{ sub.slug|category_color }}">
+                            <div class="subcat-icon-wrap" style="background:color-mix(in srgb,{{ sub.slug|category_color }} 7%,transparent);border-color:color-mix(in srgb,{{ sub.slug|category_color }} 18%,transparent)">
+                                <i class="bi {{ sub.slug|category_icon }}" style="color:{{ sub.slug|category_color }}"></i>
+                            </div>
+                            <span class="subcat-name">{{ sub.name }}</span>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Products -->
+                <div class="cat-header">
+                    <h1 class="cat-title-main">{{ category.name }}</h1>
                     <span class="products-count">{{ products_count }} товарів</span>
                 </div>
 
                 {% if products_count %}
-                <div class="category-products-grid">
+                <div class="category-products-grid js-fade">
                     {% for product in products %}
                     <article class="product-card" data-product-url="{{ product.get_absolute_url }}">
                         <div class="product-card-image">
                             {% with main_image=product.get_main_image %}
                             {% if main_image %}
-                            <img src="{{ main_image.image.url }}" alt="{{ product.name }}">
+                            <img src="{{ main_image.image.url }}" alt="{{ product.name }}" loading="lazy">
                             {% else %}
-                            <span class="product-card-placeholder">NO IMAGE</span>
+                            <span class="product-card-placeholder">
+                                <i class="bi bi-image" style="font-size:2rem;color:#333"></i>
+                            </span>
                             {% endif %}
                             {% endwith %}
                             {% if product.is_new %}
-                            <span class="product-badge badge-new">New</span>
+                            <span class="product-badge badge-new">✨ New</span>
                             {% elif product.is_popular %}
-                            <span class="product-badge badge-popular">Popular</span>
+                            <span class="product-badge badge-popular">🔥 Popular</span>
                             {% endif %}
                         </div>
                         <div class="product-card-body">
@@ -87,9 +306,9 @@
                             <div class="product-card-footer">
                                 <div class="product-price">
                                     {% if product.price %}
-                                    <span class="product-price-current">{{ product.price|floatformat:0 }} UAH</span>
+                                    <span class="product-price-current">{{ product.price|floatformat:0 }} грн</span>
                                     {% else %}
-                                    <span class="product-price-current" style="font-size: 0.85rem;">За запитом</span>
+                                    <span class="product-price-current" style="font-size:0.82rem;">За запитом</span>
                                     {% endif %}
                                 </div>
                                 {% with main_image=product.get_main_image %}
@@ -110,17 +329,13 @@
                 </div>
 
                 {% if is_paginated %}
-                <nav class="pagination" aria-label="Каталог сторінки">
+                <nav class="pagination" aria-label="Сторінки каталогу" style="margin-top: 2rem;">
                     <a class="pagination-link{% if not page_obj.has_previous %} disabled{% endif %}"
-                       href="{% if page_obj.has_previous %}?page={{ page_obj.previous_page_number }}{% else %}#{% endif %}">
-                        &lt;
-                    </a>
+                       href="{% if page_obj.has_previous %}?page={{ page_obj.previous_page_number }}{% else %}#{% endif %}">&lt;</a>
 
                     <a class="pagination-link{% if page_obj.number == 1 %} active{% endif %}" href="?page=1">1</a>
 
-                    {% if show_left_ellipsis %}
-                    <span class="pagination-ellipsis">…</span>
-                    {% endif %}
+                    {% if show_left_ellipsis %}<span class="pagination-ellipsis">…</span>{% endif %}
 
                     {% for num in page_numbers %}
                         {% if num != 1 and num != paginator.num_pages %}
@@ -129,29 +344,42 @@
                     {% endfor %}
 
                     {% if paginator.num_pages > 1 %}
-                        {% if show_right_ellipsis %}
-                        <span class="pagination-ellipsis">…</span>
-                        {% endif %}
+                        {% if show_right_ellipsis %}<span class="pagination-ellipsis">…</span>{% endif %}
                         <a class="pagination-link{% if page_obj.number == paginator.num_pages %} active{% endif %}"
                            href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
                     {% endif %}
 
                     <a class="pagination-link{% if not page_obj.has_next %} disabled{% endif %}"
-                       href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }}{% else %}#{% endif %}">
-                        &gt;
-                    </a>
+                       href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }}{% else %}#{% endif %}">&gt;</a>
                 </nav>
                 {% endif %}
+
                 {% else %}
                 <div class="no-products">
-                    <div class="no-products-icon">
-                        <i class="bi bi-inbox"></i>
-                    </div>
+                    <div class="no-products-icon"><i class="bi bi-inbox"></i></div>
                     <p class="no-products-text">В цій категорії поки немає товарів</p>
                 </div>
                 {% endif %}
+
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+    if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll('.js-fade').forEach(function(el){ el.classList.add('is-visible'); });
+        return;
+    }
+    var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(en) {
+            if (en.isIntersecting) { en.target.classList.add('is-visible'); obs.unobserve(en.target); }
+        });
+    }, { threshold: 0.06 });
+    document.querySelectorAll('.js-fade').forEach(function(el){ obs.observe(el); });
+}());
+</script>
 {% endblock %}
