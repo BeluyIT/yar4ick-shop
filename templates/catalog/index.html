@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static catalog_tags %}
 
 {% block title %}Yar4ick Technology — Техніка. Якість. Довіра.{% endblock %}
 
@@ -18,7 +18,7 @@
     align-items: center;
     justify-content: center;
     gap: 3rem;
-    transition: opacity 0.6s ease, visibility 0.6s ease;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
 }
 #splash-screen.hidden {
     opacity: 0;
@@ -26,85 +26,118 @@
     pointer-events: none;
 }
 
-.splash-brand {
-    text-align: center;
+/* Grid overlay on splash */
+#splash-screen::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(255,102,0,0.03) 60px, rgba(255,102,0,0.03) 61px),
+        repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,102,0,0.03) 60px, rgba(255,102,0,0.03) 61px);
+    pointer-events: none;
 }
+
+.splash-brand { text-align: center; position: relative; z-index: 1; }
 .splash-brand h1 {
-    font-size: clamp(2.2rem, 10vw, 5rem);
+    font-size: clamp(2rem, 9vw, 4.5rem);
     font-weight: 900;
-    letter-spacing: 3px;
+    letter-spacing: 4px;
     text-transform: uppercase;
     background: linear-gradient(135deg, #FF6600 0%, #FF8800 50%, #FFB347 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin: 0 0 0.5rem;
-    animation: glow 2.5s ease-in-out infinite;
+    animation: splash-glow 2.5s ease-in-out infinite;
 }
 .splash-brand p {
-    font-size: clamp(0.75rem, 3vw, 1rem);
-    color: #666;
-    letter-spacing: 5px;
+    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+    color: #555;
+    letter-spacing: 6px;
     text-transform: uppercase;
     margin: 0;
 }
-
-@keyframes glow {
-    0%, 100% { filter: drop-shadow(0 0 15px rgba(255,102,0,0.4)); }
-    50%       { filter: drop-shadow(0 0 35px rgba(255,102,0,0.9)); }
+@keyframes splash-glow {
+    0%, 100% { filter: drop-shadow(0 0 12px rgba(255,102,0,0.4)); }
+    50%       { filter: drop-shadow(0 0 32px rgba(255,102,0,0.9)); }
 }
 
-/* Slide widget */
+/* Scan line animation */
+.splash-scan {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+.splash-scan::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255,102,0,0.6), transparent);
+    animation: scan 3s linear infinite;
+}
+@keyframes scan {
+    0%   { top: -2px; }
+    100% { top: 100%; }
+}
+
+/* Slider widget */
 .slider-wrap {
-    width: min(300px, 80vw);
-    height: 58px;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,102,0,0.35);
-    border-radius: 29px;
+    width: min(320px, 85vw);
+    height: 62px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,102,0,0.3);
+    border-radius: 31px;
     position: relative;
     overflow: hidden;
     touch-action: none;
+    z-index: 1;
 }
 .slider-fill {
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, rgba(255,102,0,0.2), transparent);
+    background: linear-gradient(90deg, rgba(255,102,0,0.25), transparent);
     transform: scaleX(0);
     transform-origin: left;
-    border-radius: 29px;
+    border-radius: 31px;
     pointer-events: none;
+    transition: none;
 }
 .slider-thumb {
     position: absolute;
-    left: 4px;
-    top: 4px;
-    width: 50px;
-    height: 50px;
+    left: 4px; top: 4px;
+    width: 54px; height: 54px;
     border-radius: 50%;
     background: linear-gradient(135deg, #FF6600, #FF8800);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: grab;
-    box-shadow: 0 0 20px rgba(255,102,0,0.6);
+    box-shadow: 0 0 24px rgba(255,102,0,0.7), 0 0 50px rgba(255,102,0,0.3);
     z-index: 2;
     user-select: none;
     -webkit-user-select: none;
+    animation: thumb-pulse 2s ease-in-out infinite;
 }
-.slider-thumb:active { cursor: grabbing; }
-.slider-thumb i { color: #fff; font-size: 1.3rem; pointer-events: none; }
+@keyframes thumb-pulse {
+    0%, 100% { box-shadow: 0 0 24px rgba(255,102,0,0.7), 0 0 50px rgba(255,102,0,0.3); }
+    50%       { box-shadow: 0 0 35px rgba(255,102,0,0.9), 0 0 70px rgba(255,102,0,0.5); }
+}
+.slider-thumb:active { cursor: grabbing; animation: none; }
+.slider-thumb i { color: #fff; font-size: 1.4rem; pointer-events: none; }
 .slider-label {
     position: absolute;
     inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgba(255,255,255,0.35);
-    font-size: 0.8rem;
-    letter-spacing: 3px;
+    color: rgba(255,255,255,0.3);
+    font-size: 0.78rem;
+    letter-spacing: 4px;
     text-transform: uppercase;
     pointer-events: none;
-    transition: opacity 0.2s;
+    transition: opacity 0.15s;
 }
 
 /* Particles */
@@ -118,25 +151,20 @@
 .p { position: absolute; border-radius: 50%; background: #FF6600; opacity: 0;
      animation: rise linear infinite; }
 @keyframes rise {
-    0%   { transform: translateY(100vh); opacity: 0; }
-    10%  { opacity: 0.5; }
-    90%  { opacity: 0.3; }
-    100% { transform: translateY(-10vh); opacity: 0; }
+    0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+    10%  { opacity: 0.6; }
+    90%  { opacity: 0.2; }
+    100% { transform: translateY(-10vh) scale(1); opacity: 0; }
 }
 
 /* ============================================
-   LANDING
+   HERO
    ============================================ */
-#landing {
-    display: block;
-    padding-top: 80px;
-    min-height: 100vh;
-}
+#landing { display: block; padding-top: 80px; }
 
-/* Hero */
 .yt-hero {
     background: #0a0a0a;
-    padding: 4rem 1.25rem 3rem;
+    padding: 5rem 1.25rem 4rem;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -146,139 +174,282 @@
     position: absolute;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba(255,102,0,0.07) 0%, transparent 70%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(255,102,0,0.06) 0%, transparent 70%);
     pointer-events: none;
+    animation: hero-pulse 4s ease-in-out infinite;
 }
+@keyframes hero-pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    50%       { transform: translate(-50%, -50%) scale(1.2); opacity: 0.7; }
+}
+
 .yt-hero h1 {
     font-size: clamp(1.8rem, 6vw, 3.5rem);
     font-weight: 900;
-    letter-spacing: 3px;
+    letter-spacing: 4px;
     text-transform: uppercase;
     background: linear-gradient(135deg, #FF6600, #FF8800, #FFB347);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin: 0 0 0.75rem;
+    position: relative;
 }
 .yt-hero p {
-    color: #777;
-    letter-spacing: 4px;
+    color: #666;
+    letter-spacing: 5px;
     text-transform: uppercase;
-    font-size: 0.85rem;
-    margin: 0 0 2rem;
+    font-size: 0.82rem;
+    margin: 0 0 2.5rem;
 }
 
-/* Categories */
-.yt-cats {
-    background: #111111;
-    padding: 3rem 1.25rem 4rem;
+/* ============================================
+   STATS BAR
+   ============================================ */
+.yt-stats {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    padding: 0;
+    background: #0d0d0d;
+    border-top: 1px solid #1f1200;
+    border-bottom: 1px solid #1f1200;
 }
-.yt-cats-header {
+.yt-stat {
+    flex: 1;
+    max-width: 200px;
     text-align: center;
-    margin-bottom: 2rem;
+    padding: 1.5rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    border-right: 1px solid #1a1a1a;
+    transition: background 0.25s;
 }
-.yt-cats-header h2 {
-    font-size: 1.3rem;
+.yt-stat:last-child { border-right: none; }
+.yt-stat:hover { background: #141414; }
+.yt-stat-icon {
+    font-size: 1.6rem;
+    color: #FF6600;
+    filter: drop-shadow(0 0 8px rgba(255,102,0,0.5));
+}
+.yt-stat-label {
+    display: block;
+    font-size: 0.67rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    line-height: 1.4;
+}
+
+/* ============================================
+   CATEGORIES
+   ============================================ */
+.yt-cats {
+    background: #0d0d0d;
+    padding: 3.5rem 1.25rem 4.5rem;
+}
+.yt-section-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+.yt-section-header h2 {
+    font-size: clamp(1.1rem, 4vw, 1.4rem);
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 3px;
-    color: #fff;
-    margin: 0 0 0.5rem;
+    letter-spacing: 4px;
+    color: #ccc;
+    margin: 0 0 0.75rem;
 }
-.yt-cats-header h2 span { color: #FF6600; }
-.yt-cats-header div {
-    width: 60px; height: 2px;
+.yt-section-header h2 span { color: #FF6600; }
+.yt-section-line {
+    width: 80px; height: 2px;
     background: linear-gradient(90deg, #FF6600, transparent);
     margin: 0 auto;
-    box-shadow: 0 0 15px rgba(255,102,0,0.5);
+    box-shadow: 0 0 12px rgba(255,102,0,0.6);
 }
 
 .yt-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
 }
-@media (min-width: 600px) {
-    .yt-grid { grid-template-columns: repeat(3, 1fr); }
-}
-@media (min-width: 900px) {
-    .yt-grid { grid-template-columns: repeat(5, 1fr); gap: 1.25rem; }
+@media (min-width: 560px)  { .yt-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 860px)  { .yt-grid { grid-template-columns: repeat(5, 1fr); gap: 1.25rem; } }
+
+/* ---- Stagger entrance ---- */
+@keyframes yt-cat-in {
+    from { opacity: 0; transform: translateY(24px) scale(0.95); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .yt-cat {
-    background: #1a1a1a;
-    border: 1px solid #1f1200;
-    border-radius: 14px;
-    padding: 1.5rem 1rem;
+    background: #141414;
+    border: 1px solid #1a1a1a;
+    border-radius: 16px;
+    padding: 1.75rem 1rem 1.5rem;
     text-align: center;
     text-decoration: none;
     color: #fff;
-    display: block;
-    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    overflow: hidden;
     -webkit-tap-highlight-color: transparent;
+    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    animation: yt-cat-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(var(--i, 0) * 70ms + 0.3s);
 }
-.yt-cat:hover, .yt-cat:active {
-    border-color: #FF6600;
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 6px 24px rgba(255,102,0,0.25);
-    color: #fff;
+/* Corner accents */
+.yt-cat::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 40px; height: 40px;
+    border-top: 2px solid transparent;
+    border-left: 2px solid transparent;
+    border-radius: 16px 0 0 0;
+    transition: border-color 0.3s, width 0.3s, height 0.3s;
 }
-.yt-cat-icon {
-    font-size: 2.5rem;
-    display: block;
-    margin-bottom: 0.75rem;
-    transition: transform 0.25s;
+.yt-cat:hover::before {
+    border-color: var(--cat-color, #FF6600);
+    width: 60px; height: 60px;
 }
-.yt-cat:hover .yt-cat-icon, .yt-cat:active .yt-cat-icon {
-    transform: scale(1.15);
+.yt-cat::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 40px; height: 40px;
+    border-bottom: 2px solid transparent;
+    border-right: 2px solid transparent;
+    border-radius: 0 0 16px 0;
+    transition: border-color 0.3s, width 0.3s, height 0.3s;
 }
+.yt-cat:hover::after {
+    border-color: var(--cat-color, #FF6600);
+    width: 60px; height: 60px;
+}
+
+.yt-cat:hover {
+    transform: translateY(-5px) scale(1.03);
+    border-color: color-mix(in srgb, var(--cat-color, #FF6600) 35%, transparent);
+    box-shadow:
+        0 10px 32px rgba(0,0,0,0.6),
+        0 0 0 1px color-mix(in srgb, var(--cat-color, #FF6600) 25%, transparent),
+        0 0 24px color-mix(in srgb, var(--cat-color, #FF6600) 20%, transparent);
+}
+
+.yt-cat-icon-wrap {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--cat-color, #FF6600) 8%, transparent);
+    border: 1.5px solid color-mix(in srgb, var(--cat-color, #FF6600) 18%, transparent);
+    margin-bottom: 0.25rem;
+    transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+.yt-cat:hover .yt-cat-icon-wrap {
+    background: color-mix(in srgb, var(--cat-color, #FF6600) 16%, transparent);
+    border-color: color-mix(in srgb, var(--cat-color, #FF6600) 45%, transparent);
+    transform: scale(1.13) rotate(6deg);
+    box-shadow: 0 0 22px color-mix(in srgb, var(--cat-color, #FF6600) 40%, transparent);
+}
+.yt-cat-icon-wrap i {
+    font-size: 1.7rem;
+    color: var(--cat-color, #FF6600);
+    transition: filter 0.3s;
+}
+.yt-cat:hover .yt-cat-icon-wrap i {
+    filter: drop-shadow(0 0 5px var(--cat-color, #FF6600));
+}
+
 .yt-cat-name {
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: #ddd;
-    display: block;
-    margin-bottom: 0.3rem;
-}
-.yt-cat-sub {
-    font-size: 0.68rem;
-    color: #555;
-    display: block;
+    color: #ccc;
+    transition: color 0.3s;
 }
 .yt-cat:hover .yt-cat-name { color: #FF8800; }
 
-/* Products */
+.yt-cat-sub {
+    font-size: 0.65rem;
+    color: #444;
+    line-height: 1.3;
+}
+
+/* ============================================
+   PRODUCT SECTIONS
+   ============================================ */
 .yt-products {
     background: #0a0a0a;
     padding: 3rem 1.25rem 4rem;
 }
 .yt-products .container { max-width: 1200px; margin: 0 auto; }
 
-/* About */
+.yt-section-dark {
+    background: #0d0d0d;
+    padding: 3rem 1.25rem 4rem;
+}
+.yt-section-dark .container { max-width: 1200px; margin: 0 auto; }
+
+/* Animate cards on scroll */
+.product-card {
+    animation: card-in 0.4s ease both;
+}
+@keyframes card-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================
+   ABOUT STRIP
+   ============================================ */
 .yt-about {
     background: #111;
+    border-top: 1px solid #1a1a1a;
+    border-bottom: 1px solid #1a1a1a;
     padding: 3rem 1.25rem;
     text-align: center;
 }
 .yt-about p {
-    max-width: 600px;
+    max-width: 580px;
     margin: 0 auto 0.75rem;
-    color: #888;
+    color: #777;
     font-size: 0.95rem;
-    line-height: 1.7;
+    line-height: 1.8;
 }
-.yt-about p:first-of-type { color: #ccc; font-size: 1rem; }
+.yt-about p:first-of-type { color: #bbb; font-size: 1rem; }
+
+/* ============================================
+   SECTION FADE-IN (IntersectionObserver)
+   ============================================ */
+.js-fade {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.js-fade.is-visible {
+    opacity: 1;
+    transform: none;
+}
 </style>
 {% endblock %}
 
 {% block content %}
 
-<!-- SPLASH -->
+<!-- SPLASH — always shows on home page visit -->
 <div id="splash-screen">
+    <div class="splash-scan"></div>
     <div class="particles" id="pts"></div>
 
     <div class="splash-brand">
@@ -298,6 +469,7 @@
 <!-- LANDING -->
 <div id="landing">
 
+    <!-- Hero -->
     <section class="yt-hero">
         <h1>Yar4ick Technology</h1>
         <p>Техніка &bull; Якість &bull; Довіра</p>
@@ -306,54 +478,74 @@
         </a>
     </section>
 
-    <section class="yt-cats">
-        <div class="yt-cats-header">
+    <!-- Stats bar -->
+    <div class="yt-stats">
+        <div class="yt-stat">
+            <i class="bi bi-truck yt-stat-icon"></i>
+            <span class="yt-stat-label">Швидка доставка</span>
+        </div>
+        <div class="yt-stat">
+            <i class="bi bi-shield-check yt-stat-icon"></i>
+            <span class="yt-stat-label">Гарантія якості</span>
+        </div>
+        <div class="yt-stat">
+            <i class="bi bi-chat-dots yt-stat-icon"></i>
+            <span class="yt-stat-label">Консультація 24/7</span>
+        </div>
+    </div>
+
+    <!-- Categories -->
+    <section class="yt-cats js-fade">
+        <div class="yt-section-header">
             <h2><span>Категорії</span> товарів</h2>
-            <div></div>
+            <div class="yt-section-line"></div>
         </div>
         <div class="yt-grid">
-            <a href="{% url 'catalog:category_detail' slug='smartphones' %}" class="yt-cat">
-                <span class="yt-cat-icon">📱</span>
+            <a href="{% url 'catalog:category_detail' slug='smartphones' %}" class="yt-cat" style="--cat-color:#FF6600; --i:0">
+                <div class="yt-cat-icon-wrap"><i class="bi bi-phone"></i></div>
                 <span class="yt-cat-name">Смартфони</span>
-                <span class="yt-cat-sub">iPhone, Samsung, Xiaomi</span>
+                <span class="yt-cat-sub">iPhone · Samsung · Xiaomi</span>
             </a>
-            <a href="{% url 'catalog:category_detail' slug='laptops-pk' %}" class="yt-cat">
-                <span class="yt-cat-icon">💻</span>
+            <a href="{% url 'catalog:category_detail' slug='laptops-pk' %}" class="yt-cat" style="--cat-color:#00B4D8; --i:1">
+                <div class="yt-cat-icon-wrap"><i class="bi bi-laptop"></i></div>
                 <span class="yt-cat-name">Ноутбуки / ПК</span>
-                <span class="yt-cat-sub">MacBook, ASUS, MSI</span>
+                <span class="yt-cat-sub">MacBook · ASUS · MSI</span>
             </a>
-            <a href="{% url 'catalog:category_detail' slug='tablets' %}" class="yt-cat">
-                <span class="yt-cat-icon">📟</span>
+            <a href="{% url 'catalog:category_detail' slug='tablets' %}" class="yt-cat" style="--cat-color:#A855F7; --i:2">
+                <div class="yt-cat-icon-wrap"><i class="bi bi-tablet"></i></div>
                 <span class="yt-cat-name">Планшети</span>
-                <span class="yt-cat-sub">iPad, Galaxy Tab</span>
+                <span class="yt-cat-sub">iPad · Galaxy Tab</span>
             </a>
-            <a href="{% url 'catalog:category_detail' slug='gaming' %}" class="yt-cat">
-                <span class="yt-cat-icon">🎮</span>
+            <a href="{% url 'catalog:category_detail' slug='gaming' %}" class="yt-cat" style="--cat-color:#E4000F; --i:3">
+                <div class="yt-cat-icon-wrap"><i class="bi bi-controller"></i></div>
                 <span class="yt-cat-name">Ігрові</span>
-                <span class="yt-cat-sub">Xbox, PS5, Nintendo</span>
+                <span class="yt-cat-sub">PS5 · Xbox · Nintendo</span>
             </a>
-            <a href="{% url 'catalog:category_detail' slug='accessories' %}" class="yt-cat">
-                <span class="yt-cat-icon">🕹️</span>
+            <a href="{% url 'catalog:category_detail' slug='accessories' %}" class="yt-cat" style="--cat-color:#2ECC71; --i:4">
+                <div class="yt-cat-icon-wrap"><i class="bi bi-bag"></i></div>
                 <span class="yt-cat-name">Аксесуари</span>
-                <span class="yt-cat-sub">Ігри, чохли, кабелі</span>
+                <span class="yt-cat-sub">Ігри · Чохли · Кабелі</span>
             </a>
         </div>
     </section>
 
+    <!-- Popular products -->
     {% if popular_products %}
-    <section class="yt-products">
+    <section class="yt-products js-fade">
         <div class="container">
             <h2 class="section-title"><span>Популярні</span> товари</h2>
             <div class="section-divider"></div>
             <div class="products-grid">
                 {% for product in popular_products %}
-                <article class="product-card" data-product-url="{{ product.get_absolute_url }}">
+                <article class="product-card" data-product-url="{{ product.get_absolute_url }}"
+                         style="animation-delay: {{ forloop.counter0 }}00ms">
                     <div class="product-card-image">
                         {% with img=product.get_main_image %}
-                        {% if img %}<img src="{{ img.image.url }}" alt="{{ product.name }}">
-                        {% else %}<span class="product-card-placeholder">NO IMAGE</span>{% endif %}
+                        {% if img %}<img src="{{ img.image.url }}" alt="{{ product.name }}" loading="lazy">
+                        {% else %}<span class="product-card-placeholder"><i class="bi bi-image" style="font-size:2rem;color:#333"></i></span>
+                        {% endif %}
                         {% endwith %}
-                        <span class="product-badge badge-popular">Popular</span>
+                        <span class="product-badge badge-popular">🔥 Popular</span>
                     </div>
                     <div class="product-card-body">
                         <h3 class="product-card-title"><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h3>
@@ -362,11 +554,14 @@
                         {% endif %}
                         <div class="product-card-footer">
                             <div class="product-price">
-                                {% if product.price %}<span class="product-price-current">{{ product.price|floatformat:0 }} грн</span>{% endif %}
+                                {% if product.price %}
+                                <span class="product-price-current">{{ product.price|floatformat:0 }} грн</span>
+                                {% endif %}
                             </div>
                             <button class="btn btn-primary btn-sm js-add-to-cart"
                                 data-product-id="{{ product.id }}" data-name="{{ product.name }}"
-                                data-sku="{{ product.sku|default:'' }}" data-price="{{ product.price|floatformat:0|default:'0' }}"
+                                data-sku="{{ product.sku|default:'' }}"
+                                data-price="{{ product.price|floatformat:0|default:'0' }}"
                                 data-image="{% with img=product.get_main_image %}{% if img %}{{ img.image.url }}{% endif %}{% endwith %}"
                                 data-url="{{ product.get_absolute_url }}">
                                 <i class="bi bi-cart-plus"></i> В кошик
@@ -380,20 +575,23 @@
     </section>
     {% endif %}
 
+    <!-- New products -->
     {% if new_products %}
-    <section class="section section-dark">
+    <section class="yt-section-dark js-fade">
         <div class="container">
             <h2 class="section-title"><span>Новинки</span></h2>
             <div class="section-divider"></div>
             <div class="products-grid">
                 {% for product in new_products %}
-                <article class="product-card" data-product-url="{{ product.get_absolute_url }}">
+                <article class="product-card" data-product-url="{{ product.get_absolute_url }}"
+                         style="animation-delay: {{ forloop.counter0 }}00ms">
                     <div class="product-card-image">
                         {% with img=product.get_main_image %}
-                        {% if img %}<img src="{{ img.image.url }}" alt="{{ product.name }}">
-                        {% else %}<span class="product-card-placeholder">NO IMAGE</span>{% endif %}
+                        {% if img %}<img src="{{ img.image.url }}" alt="{{ product.name }}" loading="lazy">
+                        {% else %}<span class="product-card-placeholder"><i class="bi bi-image" style="font-size:2rem;color:#333"></i></span>
+                        {% endif %}
                         {% endwith %}
-                        <span class="product-badge badge-new">New</span>
+                        <span class="product-badge badge-new">✨ New</span>
                     </div>
                     <div class="product-card-body">
                         <h3 class="product-card-title"><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h3>
@@ -402,11 +600,14 @@
                         {% endif %}
                         <div class="product-card-footer">
                             <div class="product-price">
-                                {% if product.price %}<span class="product-price-current">{{ product.price|floatformat:0 }} грн</span>{% endif %}
+                                {% if product.price %}
+                                <span class="product-price-current">{{ product.price|floatformat:0 }} грн</span>
+                                {% endif %}
                             </div>
                             <button class="btn btn-primary btn-sm js-add-to-cart"
                                 data-product-id="{{ product.id }}" data-name="{{ product.name }}"
-                                data-sku="{{ product.sku|default:'' }}" data-price="{{ product.price|floatformat:0|default:'0' }}"
+                                data-sku="{{ product.sku|default:'' }}"
+                                data-price="{{ product.price|floatformat:0|default:'0' }}"
                                 data-image="{% with img=product.get_main_image %}{% if img %}{{ img.image.url }}{% endif %}{% endwith %}"
                                 data-url="{{ product.get_absolute_url }}">
                                 <i class="bi bi-cart-plus"></i> В кошик
@@ -420,9 +621,10 @@
     </section>
     {% endif %}
 
-    <section class="yt-about">
+    <!-- About -->
+    <section class="yt-about js-fade">
         <p>Yar4ick Technology — твій надійний магазин техніки.</p>
-        <p>Смартфони, ноутбуки, планшети, ігрові приставки та аксесуари від провідних брендів. Швидка доставка по всій Україні.</p>
+        <p>Смартфони, ноутбуки, планшети, ігрові приставки та аксесуари від провідних брендів.<br>Швидка доставка по всій Україні. Гарантія на кожен товар.</p>
     </section>
 
 </div>
@@ -433,61 +635,49 @@
 (function () {
     'use strict';
 
-    var UNLOCK_KEY = 'yt_v2_unlocked';
-
-    // Safe sessionStorage wrapper (fails in iOS private browsing)
-    function ssGet(k) { try { return sessionStorage.getItem(k); } catch(e) { return null; } }
-    function ssSet(k,v) { try { sessionStorage.setItem(k,v); } catch(e) {} }
-
     var splash = document.getElementById('splash-screen');
     var wrap   = document.getElementById('sliderWrap');
     var fill   = document.getElementById('sliderFill');
     var thumb  = document.getElementById('sliderThumb');
 
-    // If any element missing, bail — landing is already visible
     if (!splash || !wrap || !fill || !thumb) return;
 
     var label = wrap.querySelector('.slider-label');
 
-    /* --- particles --- */
+    /* Particles */
     var pts = document.getElementById('pts');
     if (pts) {
-        for (var i = 0; i < 20; i++) {
+        for (var i = 0; i < 25; i++) {
             var d = document.createElement('div');
             d.className = 'p';
-            d.style.cssText = 'left:' + (Math.random()*100) + 'vw;width:' + (1+Math.random()*3) + 'px;height:' + (1+Math.random()*3) + 'px;animation-duration:' + (5+Math.random()*8) + 's;animation-delay:' + (Math.random()*6) + 's';
+            d.style.cssText =
+                'left:'    + (Math.random() * 100) + 'vw;' +
+                'width:'   + (1 + Math.random() * 4) + 'px;' +
+                'height:'  + (1 + Math.random() * 4) + 'px;' +
+                'animation-duration:' + (5 + Math.random() * 10) + 's;' +
+                'animation-delay:'    + (Math.random() * 8) + 's';
             pts.appendChild(d);
         }
     }
 
-    /* --- unlock logic --- */
-    function showLanding() {
-        splash.classList.add('hidden');
-        document.body.style.overflow = '';
-        ssSet(UNLOCK_KEY, '1');
-    }
-
-    // Already unlocked this session? Just hide splash immediately
-    if (ssGet(UNLOCK_KEY)) {
-        splash.style.display = 'none';
-        return;
-    }
-
-    // Show splash over already-visible landing
+    /* Always show splash — no session skip */
     document.body.style.overflow = 'hidden';
 
     var maxLeft = wrap.offsetWidth - thumb.offsetWidth - 8;
-    var dragging = false;
-    var startX = 0;
-    var curLeft = 0;
+    var dragging = false, startX = 0, curLeft = 0;
+
+    function unlock() {
+        splash.classList.add('hidden');
+        document.body.style.overflow = '';
+    }
 
     function setPos(x) {
         var left = Math.max(0, Math.min(x, maxLeft));
         curLeft = left;
         thumb.style.transform = 'translateX(' + left + 'px)';
-        fill.style.transform = 'scaleX(' + (left / maxLeft) + ')';
-        label.style.opacity = left > 30 ? '0' : '1';
-        if (left / maxLeft >= 0.88) showLanding();
+        fill.style.transform  = 'scaleX(' + (left / maxLeft) + ')';
+        if (label) label.style.opacity = left > 40 ? '0' : '1';
+        if (left / maxLeft >= 0.88) unlock();
     }
 
     function snapBack() {
@@ -506,12 +696,9 @@
         startX = e.touches[0].clientX - curLeft;
         e.preventDefault();
     }, { passive: false });
-
     document.addEventListener('touchmove', function (e) {
-        if (!dragging) return;
-        setPos(e.touches[0].clientX - startX);
+        if (dragging) setPos(e.touches[0].clientX - startX);
     }, { passive: true });
-
     document.addEventListener('touchend', function () {
         if (!dragging) return;
         dragging = false;
@@ -525,8 +712,7 @@
         e.preventDefault();
     });
     document.addEventListener('mousemove', function (e) {
-        if (!dragging) return;
-        setPos(e.clientX - startX);
+        if (dragging) setPos(e.clientX - startX);
     });
     document.addEventListener('mouseup', function () {
         if (!dragging) return;
@@ -534,15 +720,30 @@
         if (curLeft / maxLeft < 0.88) snapBack();
     });
 
-    /* Tap anywhere on splash = unlock (fallback for any click issues) */
+    /* Click anywhere on splash = fast unlock */
     splash.addEventListener('click', function (e) {
-        if (e.target !== thumb) showLanding();
+        if (!e.target.closest('#sliderWrap')) unlock();
     });
 
-    /* Recalc on resize */
     window.addEventListener('resize', function () {
         maxLeft = wrap.offsetWidth - thumb.offsetWidth - 8;
     });
+
+    /* ---- Scroll fade-in ---- */
+    var faders = document.querySelectorAll('.js-fade');
+    if ('IntersectionObserver' in window) {
+        var obs = new IntersectionObserver(function (entries) {
+            entries.forEach(function (en) {
+                if (en.isIntersecting) {
+                    en.target.classList.add('is-visible');
+                    obs.unobserve(en.target);
+                }
+            });
+        }, { threshold: 0.12 });
+        faders.forEach(function (el) { obs.observe(el); });
+    } else {
+        faders.forEach(function (el) { el.classList.add('is-visible'); });
+    }
 }());
 </script>
 {% endblock %}
